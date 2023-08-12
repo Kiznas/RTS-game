@@ -2,34 +2,33 @@ using UnityEngine;
 
 public class BuildingsGrid : MonoBehaviour
 {
-    [SerializeField] private Vector2Int GridSize;
+    [SerializeField] private Vector2Int _gridSize;
     [SerializeField] private LayerMask _raycastIgnoreLayer;
+    [SerializeField] private Camera _mainCamera;
 
-    private Building[,] grid;
-    private Building flyingBuilding;
-    private Camera mainCamera;
+    private Building[,] _grid;
+    private Building _flyingBuilding;
 
     private void Awake()
     {
-        grid = new Building[GridSize.x, GridSize.y];
-        mainCamera = Camera.main;
+        _grid = new Building[_gridSize.x, _gridSize.y];
     }
 
     public void StartPlacingBuilding(Building buildingPrefab)
     {
-        if (flyingBuilding != null)
+        if (_flyingBuilding != null)
         {
-            Destroy(flyingBuilding.gameObject);
+            Destroy(_flyingBuilding.gameObject);
         }
 
-        flyingBuilding = Instantiate(buildingPrefab);
+        _flyingBuilding = Instantiate(buildingPrefab);
     }
 
     private void Update()
     {
-        if (flyingBuilding != null)
+        if (_flyingBuilding != null)
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~_raycastIgnoreLayer))
             {
@@ -43,12 +42,13 @@ public class BuildingsGrid : MonoBehaviour
 
                 if (hit.collider.CompareTag("Land"))
                 {
-                    flyingBuilding.transform.position = new Vector3(roundedX, hit.point.y, roundedY);
+                    _flyingBuilding.transform.position = new Vector3(roundedX, hit.point.y, roundedY);
                 }
 
-                flyingBuilding.SetTransparent();
+                _flyingBuilding.SetTransparent();
 
-                if (flyingBuilding.IsAvailable && Input.GetMouseButtonDown(0))
+                //Rewrite on input system
+                if (_flyingBuilding.IsAvailable && Input.GetMouseButtonDown(0))
                 {
                     PlaceFlyingBuilding(x, y);
                 }
@@ -57,16 +57,15 @@ public class BuildingsGrid : MonoBehaviour
     }
     private void PlaceFlyingBuilding(int placeX, int placeY)
     {
-        for (int x = 0; x < flyingBuilding.Size.x; x++)
+        for (int x = 0; x < _flyingBuilding.Size.x; x++)
         {
-            for (int y = 0; y < flyingBuilding.Size.y; y++)
+            for (int y = 0; y < _flyingBuilding.Size.y; y++)
             {
-                grid[placeX + x, placeY + y] = flyingBuilding;
+                _grid[placeX + x, placeY + y] = _flyingBuilding;
             }
         }
 
-        flyingBuilding.SetNormal();
-        flyingBuilding.objectCollider.isTrigger = false;
-        flyingBuilding = null;
+        _flyingBuilding.SetNormal();
+        _flyingBuilding = null;
     }
 }

@@ -6,6 +6,8 @@ public class CameraMovement : MonoBehaviour
     private InputSettings cameraActions;
     private Transform cameraTransform;
 
+    [SerializeField] bool _useCornerMovement;
+
     [SerializeField] Camera _camera;
 
     [SerializeField]
@@ -69,9 +71,8 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        CheckMouseAtScreenEdge();
+        if (_useCornerMovement) { CheckMouseAtScreenEdge(); }
         DragCamera();
-
         //move base and camera objects
         UpdateVelocity();
         UpdateBasePosition();

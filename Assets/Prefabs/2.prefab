@@ -299,16 +299,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83f0be99ef494741a294e66890d8e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubePrefab: {fileID: 8968520245176562335, guid: df65b7cd8fa5d414ea78ecd3123f485e,
+  _cubePrefab: {fileID: 8968520245176562335, guid: df65b7cd8fa5d414ea78ecd3123f485e,
     type: 3}
   _ignoreLayer:
     serializedVersion: 2
     m_Bits: 4
-  Size: {x: 1, y: 1}
-  objectCollider: {fileID: 423236817683903387}
-  IsAvailable: 1
-  isOnLand: 1
-  isTriggered: 0
+  _isAvaliable: 1
+  _size: {x: 1, y: 1}
+  _objectCollider: {fileID: 5811526195508149243, guid: 5ea3868ee67c9ef47b0a6e435e09ae3c,
+    type: 3}
 --- !u!65 &423236817683903387
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -373,5 +372,5 @@ MonoBehaviour:
   SnapEulerAngles: 1
   SnapAngleStrategy: 0
   angleResolution: 30
-  AlignPixelGrid: 0
+  AlignPixelGrid: 1
   PixelGridReference: {fileID: 0}
