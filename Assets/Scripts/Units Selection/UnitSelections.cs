@@ -13,7 +13,7 @@ public class UnitSelections : MonoBehaviour
 
     private void Awake()
     {
-        //if an instance of this already exists and it isn’t this one
+        //if an instance of this already exists and it isnâ€™t this one
         if (_instance != null && _instance != this)
         {
             // we destroy this instance
@@ -30,7 +30,7 @@ public class UnitSelections : MonoBehaviour
     {
         DeselectAll();
         unitSelectedList.Add(unitToAdd);
-        unitToAdd.IsSelected = true;
+        unitToAdd.isSelected = true;
     }
 
     public void ShiftClickSelect(Unit unitToAdd)
@@ -38,11 +38,11 @@ public class UnitSelections : MonoBehaviour
         if(!unitSelectedList.Contains(unitToAdd))
         {
             unitSelectedList.Add(unitToAdd);
-            unitToAdd.IsSelected= true;
+            unitToAdd.isSelected= true;
         }
         else
         { 
-            unitToAdd.IsSelected= false;
+            unitToAdd.isSelected= false;
             unitSelectedList.Remove(unitToAdd);
         }
     }
@@ -51,7 +51,7 @@ public class UnitSelections : MonoBehaviour
     {
         unitSelectedList.Clear();
         unitSelectedList = units;
-        unitSelectedList.ForEach(unit => { unit.IsSelected = true; });
+        unitSelectedList.ForEach(unit => { unit.isSelected = true; });
     }
 
     public void DeselectAll()
@@ -59,7 +59,7 @@ public class UnitSelections : MonoBehaviour
         foreach (var unit in unitSelectedList)
         {
             unit.transform.GetChild(0).gameObject.SetActive(false);
-            unit.IsSelected = false;
+            unit.isSelected = false;
         }
         unitSelectedList.Clear();
     }

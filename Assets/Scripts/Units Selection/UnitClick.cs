@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class UnitClick : MonoBehaviour
 {
-    [SerializeField] private Camera _camera;
+    [FormerlySerializedAs("_camera")] [SerializeField] private Camera camera;
 
-    [SerializeField] private LayerMask _clickable;
+    [FormerlySerializedAs("_clickable")] [SerializeField] private LayerMask clickable;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
 
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _clickable))
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, clickable))
             {
 
                 if (Input.GetKey(KeyCode.LeftShift))

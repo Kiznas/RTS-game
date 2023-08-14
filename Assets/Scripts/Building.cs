@@ -1,29 +1,40 @@
 using UnityEngine;
+// ReSharper disable PossibleLossOfFraction
 
 [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
 public class Building : MonoBehaviour
 {
-    [SerializeField] private GameObject _cubePrefab;
-    [SerializeField] private LayerMask _ignoreLayer;
-    [SerializeField] private bool _isAvaliable = true;
-    [SerializeField] private Vector2Int _size = Vector2Int.one;
-    [SerializeField] private BoxCollider _objectCollider;
-    public bool IsAvailable { get { return _isAvaliable; } }
-    public Vector2Int Size { get { return _size; } }
+    [SerializeField] private GameObject cubePrefab;
+    [SerializeField] private LayerMask ignoreLayer;
+    [SerializeField] private bool isAvailable = true;
+    [SerializeField] private Vector2Int size = Vector2Int.one;
+    [SerializeField] private BoxCollider objectCollider;
+    public bool IsAvailable => isAvailable;
+    public Vector2Int Size => size;
 
     private bool _isOnLand = true;
-    private bool _isTriggered = false;
+    private bool _isTriggered;
     private GameObject _cubeObj;
-    
+    private Renderer[] _renderers;
+    private const string ID = "_ID";
+
+    private const float RAYCAST_DISTANCE = 0.5f;
+
+
+    private void Start()
+    {
+        SetID((byte)Random.Range(0, 255));
+        _renderers = GetComponentsInChildren<Renderer>();
+    }
 
     private void Reset()
     {
-        _objectCollider = GetComponent<BoxCollider>();
+        objectCollider = GetComponent<BoxCollider>();
     }
 
     public void SetTransparent()
     {
-        RecolorMaterial(_isAvaliable ? Color.green : Color.red);
+        RecolorMaterial(isAvailable ? Color.green : Color.red);
         CreateCube();
     }
 
@@ -31,20 +42,21 @@ public class Building : MonoBehaviour
     {
         Destroy(_cubeObj);
         RecolorMaterial(Color.white);
-        _objectCollider.isTrigger = false;
-        SetID((byte)Random.Range(0, 255));
+        objectCollider.isTrigger = false;
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void CreateCube()
     {
-        for (int x = 0; x < Size.x; x++)
+        for (var x = 0; x < Size.x; x++)
         {
-            for (int y = 0; y < Size.y; y++)
+            for (var y = 0; y < Size.y; y++)
             {
                 if (_cubeObj == null)
                 {
-                    Vector3 cubePosition = transform.position + new Vector3(x, 0, y);
-                    _cubeObj = Instantiate(_cubePrefab, cubePosition, Quaternion.identity, transform);
+                    var transform1 = transform;
+                    var cubePosition = transform1.position + new Vector3(x, 0, y);
+                    _cubeObj = Instantiate(cubePrefab, cubePosition, Quaternion.identity, transform1);
                 }
 
                 _cubeObj.GetComponent<Renderer>().material.color = IsAvailable ? new Color(0, 255, 0, 0.6f) : new Color(255, 0, 0, 0.6f);
@@ -55,25 +67,24 @@ public class Building : MonoBehaviour
 
         CheckIfOnLand();
 
-        _isAvaliable = _isOnLand && !_isTriggered;
+        isAvailable = _isOnLand && !_isTriggered;
     }
 
     private void CheckIfOnLand()
     {
-        Vector3 cornerPosition = _cubeObj.transform.position - new Vector3(Size.x / 2f, 0, Size.y / 2f) + new Vector3(0, 0.2f, 0);
-        float raycastDistance = 0.5f;
+        var cornerPosition = _cubeObj.transform.position - new Vector3(Size.x / 2f, 0, Size.y / 2f) + new Vector3(0, 0.2f, 0);
 
-        Ray rayTopLeft = new(cornerPosition + new Vector3(0, 0, 0), Vector3.down * raycastDistance);
-        Ray rayTopRight = new(cornerPosition + new Vector3(Size.x, 0, 0), Vector3.down * raycastDistance);
-        Ray rayBottomLeft = new(cornerPosition + new Vector3(0, 0, Size.y), Vector3.down * raycastDistance);
-        Ray rayBottomRight = new(cornerPosition + new Vector3(Size.x, 0, Size.y), Vector3.down * raycastDistance);
+        Ray rayTopLeft = new(cornerPosition + new Vector3(0, 0, 0), Vector3.down * RAYCAST_DISTANCE);
+        Ray rayTopRight = new(cornerPosition + new Vector3(Size.x, 0, 0), Vector3.down * RAYCAST_DISTANCE);
+        Ray rayBottomLeft = new(cornerPosition + new Vector3(0, 0, Size.y), Vector3.down * RAYCAST_DISTANCE);
+        Ray rayBottomRight = new(cornerPosition + new Vector3(Size.x, 0, Size.y), Vector3.down * RAYCAST_DISTANCE);
 
         _isOnLand = true;
 
-        if (!Physics.Raycast(rayTopLeft, raycastDistance, ~_ignoreLayer) ||
-            !Physics.Raycast(rayTopRight, raycastDistance, ~_ignoreLayer) ||
-            !Physics.Raycast(rayBottomLeft, raycastDistance, ~_ignoreLayer) ||
-            !Physics.Raycast(rayBottomRight, raycastDistance, ~_ignoreLayer))
+        if (!Physics.Raycast(rayTopLeft, RAYCAST_DISTANCE, ~ignoreLayer) ||
+            !Physics.Raycast(rayTopRight, RAYCAST_DISTANCE, ~ignoreLayer) ||
+            !Physics.Raycast(rayBottomLeft, RAYCAST_DISTANCE, ~ignoreLayer) ||
+            !Physics.Raycast(rayBottomRight, RAYCAST_DISTANCE, ~ignoreLayer))
         {
             _isOnLand = false;
         }
@@ -81,26 +92,26 @@ public class Building : MonoBehaviour
 
     private void RecolorMaterial(Color color)
     {
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        foreach (var item in renderers)
+        foreach (var item in _renderers)
         {
             item.material.color = color;
         }
     }
 
-    //Done so pixel shader will set different id for buildings so their highliting will work properly
+    //Done so pixel shader will set different id for buildings so their outlines will work properly
     private void SetID(byte id)
     {
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        var renderers = GetComponentsInChildren<Renderer>();
         foreach (var item in renderers)
         {
-            item.material.SetFloat("_ID", id);
+            // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
+            item.material.SetFloat(ID, id);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other != null && other.gameObject != this)
+        if (other != null && other != objectCollider)
         {
             _isTriggered = true;
         }
@@ -108,7 +119,7 @@ public class Building : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other != null && other.gameObject != this)
+        if (other != null && other != objectCollider)
         {
             _isTriggered = false;
         }
@@ -117,16 +128,13 @@ public class Building : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if(_cubeObj != null)
-        {
-            Vector3 cornerPosition = _cubeObj.transform.position - new Vector3(_size.x / 2f, 0, _size.y / 2f) + new Vector3(0, 0.2f, 0);
-            float raycastDistance = 0.5f;
+        if (_cubeObj == null) return;
+        var cornerPosition = _cubeObj.transform.position - new Vector3(size.x / 2f, 0, size.y / 2f) + new Vector3(0, 0.2f, 0);
 
-            Gizmos.DrawRay(cornerPosition + new Vector3(0, 0, 0), Vector3.down * raycastDistance);
-            Gizmos.DrawRay(cornerPosition + new Vector3(_size.x, 0, 0), Vector3.down * raycastDistance);
-            Gizmos.DrawRay(cornerPosition + new Vector3(0, 0, _size.y), Vector3.down * raycastDistance);
-            Gizmos.DrawRay(cornerPosition + new Vector3(_size.x, 0, _size.y), Vector3.down * raycastDistance);
-        }
+        Gizmos.DrawRay(cornerPosition + new Vector3(0, 0, 0), Vector3.down * RAYCAST_DISTANCE);
+        Gizmos.DrawRay(cornerPosition + new Vector3(size.x, 0, 0), Vector3.down * RAYCAST_DISTANCE);
+        Gizmos.DrawRay(cornerPosition + new Vector3(0, 0, size.y), Vector3.down * RAYCAST_DISTANCE);
+        Gizmos.DrawRay(cornerPosition + new Vector3(size.x, 0, size.y), Vector3.down * RAYCAST_DISTANCE);
     }
 #endif
 }
