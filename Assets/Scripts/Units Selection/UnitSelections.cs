@@ -3,62 +3,50 @@ using UnityEngine;
 
 namespace Units_Selection
 {
-    public class UnitSelections : MonoBehaviour
-    {
+    public class UnitSelections : MonoBehaviour{
         public List<Unit> unitList = new();
         public List<Unit> unitSelectedList = new();
 
         public static UnitSelections Instance { get; private set; }
 
-        private void Awake()
-        {
-            //if an instance of this already exists and it isn’t this one
-            if (Instance != null && Instance != this)
-            {
-                // we destroy this instance
+        private void Awake(){
+            if (Instance != null && Instance != this){
                 Destroy(gameObject);
             }
-            else
-            {
-                //make this the instance
+            else{
                 Instance = this;
             }
         }
 
-        public void ClickSelect(Unit unitToAdd) 
-        {
+        public void ClickSelect(Unit unitToAdd){
             DeselectAll();
+            unitToAdd.UnitSelected(true);
             unitSelectedList.Add(unitToAdd);
-            unitToAdd.isSelected = true;
         }
 
-        public void ShiftClickSelect(Unit unitToAdd)
-        {
+        public void ShiftClickSelect(Unit unitToAdd){
             if(!unitSelectedList.Contains(unitToAdd))
             {
                 unitSelectedList.Add(unitToAdd);
-                unitToAdd.isSelected= true;
+                unitToAdd.UnitSelected(true);
             }
             else
-            { 
-                unitToAdd.isSelected= false;
+            {
+                unitToAdd.UnitSelected(false);
                 unitSelectedList.Remove(unitToAdd);
             }
         }
 
-        public void DragSelect(List<Unit> units)
-        {
+        public void DragSelect(List<Unit> units){
             unitSelectedList.Clear();
             unitSelectedList = units;
-            unitSelectedList.ForEach(unit => { unit.isSelected = true; });
+            unitSelectedList.ForEach(unit => { unit.UnitSelected(true); });
         }
 
-        public void DeselectAll()
-        {
+        public void DeselectAll(){
             foreach (var unit in unitSelectedList)
             {
-                unit.transform.GetChild(0).gameObject.SetActive(false);
-                unit.isSelected = false;
+                unit.UnitSelected(false);
             }
             unitSelectedList.Clear();
         }

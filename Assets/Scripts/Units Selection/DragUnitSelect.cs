@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Units_Selection
 {
@@ -23,7 +23,7 @@ namespace Units_Selection
 
         private void Update()
         {
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 _startPosition = Input.mousePosition;
                 _selectionBox = new Rect();
@@ -36,9 +36,14 @@ namespace Units_Selection
                 DrawSelection();
             }
 
-            if(Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0))
             {
-                SelectUnits();
+                Debug.Log("size" + boxVisual.sizeDelta);
+                if (boxVisual.sizeDelta is { x: >= 30, y: >= 30 })
+                {
+                    SelectUnits();
+                }
+
                 _startPosition = Vector2.zero;
                 _endPosition = Vector2.zero;
                 DrawVisual();
@@ -84,17 +89,13 @@ namespace Units_Selection
         }
         private void SelectUnits()
         {
-            //Refactor this...
-            var unitList = new List<Unit>();
-            foreach (var item in UnitSelections.Instance.unitList)
-            {
-                if (_selectionBox.Contains(camera.WorldToScreenPoint(item.transform.position)))
-                {
-                    unitList.Add(item);
-                }
-            }
+            //TODO: Refactor this code
+            var unitList = UnitSelections.Instance.unitList
+                .Where(item => _selectionBox.Contains(camera.WorldToScreenPoint(item.transform.position)))
+                .ToList();
             UnitSelections.Instance.DragSelect(unitList);
         }
     }
 }
+    
 
