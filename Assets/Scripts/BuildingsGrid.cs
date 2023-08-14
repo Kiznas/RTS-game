@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class BuildingsGrid : MonoBehaviour
 {
-    [SerializeField] private Vector2Int _gridSize;
-    [SerializeField] private LayerMask _raycastIgnoreLayer;
-    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private Vector2Int gridSize;
+    [SerializeField] private LayerMask raycastIgnoreLayer;
+    [SerializeField] private Camera mainCamera;
 
     private Building[,] _grid;
     private Building _flyingBuilding;
 
     private void Awake()
     {
-        _grid = new Building[_gridSize.x, _gridSize.y];
+        _grid = new Building[gridSize.x, gridSize.y];
     }
 
     public void StartPlacingBuilding(Building buildingPrefab)
@@ -26,40 +26,36 @@ public class BuildingsGrid : MonoBehaviour
 
     private void Update()
     {
-        if (_flyingBuilding != null)
+        if (_flyingBuilding == null) return;
+        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+        if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, ~raycastIgnoreLayer)) return;
+        var worldPosition = hit.point;
+
+        var roundedX = Mathf.Round(worldPosition.x / 0.1f) * 0.1f;
+        var roundedY = Mathf.Round(worldPosition.z / 0.1f) * 0.1f;
+
+        var x = Mathf.RoundToInt(roundedX);
+        var y = Mathf.RoundToInt(roundedY);
+
+        if (hit.collider.CompareTag("Land"))
         {
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+            _flyingBuilding.transform.position = new Vector3(roundedX, hit.point.y, roundedY);
+        }
 
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~_raycastIgnoreLayer))
-            {
-                Vector3 worldPosition = hit.point;
+        _flyingBuilding.SetTransparent();
 
-                float roundedX = Mathf.Round(worldPosition.x / 0.1f) * 0.1f;
-                float roundedY = Mathf.Round(worldPosition.z / 0.1f) * 0.1f;
-
-                int x = Mathf.RoundToInt(roundedX);
-                int y = Mathf.RoundToInt(roundedY);
-
-                if (hit.collider.CompareTag("Land"))
-                {
-                    _flyingBuilding.transform.position = new Vector3(roundedX, hit.point.y, roundedY);
-                }
-
-                _flyingBuilding.SetTransparent();
-
-                //Rewrite on input system
-                if (_flyingBuilding.IsAvailable && Input.GetMouseButtonDown(0))
-                {
-                    PlaceFlyingBuilding(x, y);
-                }
-            }
+        //Rewrite on input system
+        if (_flyingBuilding.IsAvailable && Input.GetMouseButtonDown(0))
+        {
+            PlaceFlyingBuilding(x, y);
         }
     }
     private void PlaceFlyingBuilding(int placeX, int placeY)
     {
-        for (int x = 0; x < _flyingBuilding.Size.x; x++)
+        for (var x = 0; x < _flyingBuilding.Size.x; x++)
         {
-            for (int y = 0; y < _flyingBuilding.Size.y; y++)
+            for (var y = 0; y < _flyingBuilding.Size.y; y++)
             {
                 _grid[placeX + x, placeY + y] = _flyingBuilding;
             }

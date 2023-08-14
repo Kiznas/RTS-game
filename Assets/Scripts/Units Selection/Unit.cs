@@ -1,15 +1,16 @@
 
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class Unit : MonoBehaviour
 {
-    private NavMeshAgent agent;
-    public bool IsSelected;
+    private NavMeshAgent _agent;
+    [FormerlySerializedAs("IsSelected")] public bool isSelected;
     void Start()
     {
         UnitSelections.Instance.unitlist.Add(this);
-        agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     void OnDestroy()
@@ -19,7 +20,7 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1) && IsSelected) // Left mouse button clicked
+        if (Input.GetMouseButtonDown(1) && isSelected) // Left mouse button clicked
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -33,6 +34,6 @@ public class Unit : MonoBehaviour
 
     private void MoveToDestination(Vector3 destination)
     {
-        agent.SetDestination(destination);
+        _agent.SetDestination(destination);
     }
 }

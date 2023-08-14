@@ -3,16 +3,13 @@ using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour
 {
-    private InputSettings cameraActions;
-    private Transform cameraTransform;
-
-    [SerializeField] bool _useCornerMovement;
-
-    [SerializeField] Camera _camera;
+    [SerializeField] private bool useCornerMovement;
+    [SerializeField] private new Camera camera;
 
     [SerializeField]
     private float maxSpeed = 5f;
-    private float speed;
+    private float _speed;
+    
     [SerializeField]
     private float acceleration = 10f;
     [SerializeField]
@@ -33,45 +30,45 @@ public class CameraMovement : MonoBehaviour
     [Range(0f, 0.1f)]
     private float edgeTolerance = 0.05f;
 
-    //value set in various functions 
-    //used to update the position of the camera base object.
-    private Vector3 targetPosition;
-
-    private float zoomHeight;
+    private InputSettings _cameraActions;
+    private Transform _cameraTransform;
+    
+    private Vector3 _targetPosition;
+    private float _zoomHeight;
 
     //used to track and maintain velocity w/o a rigidbody
-    private Vector3 horizontalVelocity;
-    private Vector3 lastPosition;
+    private Vector3 _horizontalVelocity;
+    private Vector3 _lastPosition;
 
     //tracks where the dragging action started
-    Vector3 startDrag;
+    private Vector3 _startDrag;
 
     private void Awake()
     {
-        cameraActions = new InputSettings();
-        cameraTransform = this.GetComponentInChildren<Camera>().transform;
+        _cameraActions = new InputSettings();
+        _cameraTransform = camera.transform;
     }
 
     private void OnEnable()
     {
-        zoomHeight = cameraTransform.localPosition.y;
-        cameraTransform.LookAt(this.transform);
+        _zoomHeight = _cameraTransform.localPosition.y;
+        _cameraTransform.LookAt(transform);
 
-        lastPosition = this.transform.position;
+        _lastPosition = transform.position;
 
-        cameraActions.CameraMovement.Zoom.performed += ZoomCamera;
-        cameraActions.CameraMovement.Enable();
+        _cameraActions.CameraMovement.Zoom.performed += ZoomCamera;
+        _cameraActions.CameraMovement.Enable();
     }
 
     private void OnDisable()
     {
-        cameraActions.CameraMovement.Zoom.performed -= ZoomCamera;
-        cameraActions.CameraMovement.Disable();
+        _cameraActions.CameraMovement.Zoom.performed -= ZoomCamera;
+        _cameraActions.CameraMovement.Disable();
     }
 
     private void Update()
     {
-        if (_useCornerMovement) { CheckMouseAtScreenEdge(); }
+        if (useCornerMovement) { CheckMouseAtScreenEdge(); }
         DragCamera();
         //move base and camera objects
         UpdateVelocity();
@@ -81,9 +78,10 @@ public class CameraMovement : MonoBehaviour
 
     private void UpdateVelocity()
     {
-        horizontalVelocity = (this.transform.position - lastPosition) / Time.deltaTime;
-        horizontalVelocity.y = 0f;
-        lastPosition = this.transform.position;
+        var position = transform.position;
+        _horizontalVelocity = (position - _lastPosition) / Time.deltaTime;
+        _horizontalVelocity.y = 0f;
+        _lastPosition = position;
     }
 
     private void DragCamera()
@@ -92,23 +90,23 @@ public class CameraMovement : MonoBehaviour
             return;
 
         //create plane to raycast to
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        var plane = new Plane(Vector3.up, Vector3.zero);
+        var ray = camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (plane.Raycast(ray, out float distance))
+        if (plane.Raycast(ray, out var distance))
         {
             if (Mouse.current.rightButton.wasPressedThisFrame)
-                startDrag = ray.GetPoint(distance);
+                _startDrag = ray.GetPoint(distance);
             else
-                targetPosition += startDrag - ray.GetPoint(distance);
+                _targetPosition += _startDrag - ray.GetPoint(distance);
         }
     }
 
     private void CheckMouseAtScreenEdge()
     {
         //mouse position is in pixels
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
-        Vector3 moveDirection = Vector3.zero;
+        var mousePosition = Mouse.current.position.ReadValue();
+        var moveDirection = Vector3.zero;
 
         //horizontal scrolling
         if (mousePosition.x < edgeTolerance * Screen.width)
@@ -122,59 +120,59 @@ public class CameraMovement : MonoBehaviour
         else if (mousePosition.y > (1f - edgeTolerance) * Screen.height)
             moveDirection += GetCameraForward();
 
-        targetPosition += moveDirection;
+        _targetPosition += moveDirection;
     }
 
     private void UpdateBasePosition()
     {
-        if (targetPosition.sqrMagnitude > 0.1f)
+        if (_targetPosition.sqrMagnitude > 0.1f)
         {
             //create a ramp up or acceleration
-            speed = Mathf.Lerp(speed, maxSpeed, Time.deltaTime * acceleration);
-            transform.position += speed * Time.deltaTime * targetPosition;
+            _speed = Mathf.Lerp(_speed, maxSpeed, Time.deltaTime * acceleration);
+            transform.position += _speed * Time.deltaTime * _targetPosition;
         }
         else
         {
             //create smooth slow down
-            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
-            transform.position += horizontalVelocity * Time.deltaTime;
+            _horizontalVelocity = Vector3.Lerp(_horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
+            transform.position += _horizontalVelocity * Time.deltaTime;
         }
 
         //reset for next frame
-        targetPosition = Vector3.zero;
+        _targetPosition = Vector3.zero;
     }
 
     private void ZoomCamera(InputAction.CallbackContext obj)
     {
-        float inputValue = -obj.ReadValue<Vector2>().y / 100f;
+        var inputValue = -obj.ReadValue<Vector2>().y / 100f;
 
-        if (Mathf.Abs(inputValue) > 0.1f)
-        {
-            float newFOV = _camera.orthographicSize + inputValue * stepSize;
+        if (!(Mathf.Abs(inputValue) > 0.1f)) return;
+        var newFOV = camera.orthographicSize + inputValue * stepSize;
 
-            if (newFOV < minFOV)
-                newFOV = minFOV;
-            else if (newFOV > maxFOV)
-                newFOV = maxFOV;
+        if (newFOV < minFOV)
+            newFOV = minFOV;
+        else if (newFOV > maxFOV)
+            newFOV = maxFOV;
 
-            _camera.orthographicSize = newFOV;
-        }
+        camera.orthographicSize = newFOV;
     }
 
     private void UpdateCameraPosition()
     {
         //set zoom target
-        Vector3 zoomTarget = new Vector3(cameraTransform.localPosition.x, zoomHeight, cameraTransform.localPosition.z);
+        var localPosition = _cameraTransform.localPosition;
+        var zoomTarget = new Vector3(localPosition.x, _zoomHeight, localPosition.z);
         //add vector for forward/backward zoom
-        zoomTarget -= zoomSpeed * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
+        zoomTarget -= zoomSpeed * (_zoomHeight - localPosition.y) * Vector3.forward;
 
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
-        cameraTransform.LookAt(this.transform);
+        localPosition = Vector3.Lerp(localPosition, zoomTarget, Time.deltaTime * zoomDampening);
+        _cameraTransform.localPosition = localPosition;
+        _cameraTransform.LookAt(transform);
     }
 
     private Vector3 GetCameraForward()
     {
-        Vector3 forward = cameraTransform.forward;
+        var forward = _cameraTransform.forward;
         forward.y = 0f;
         return forward;
     }
@@ -182,7 +180,7 @@ public class CameraMovement : MonoBehaviour
     //gets the horizontal right vector of the camera
     private Vector3 GetCameraRight()
     {
-        Vector3 right = cameraTransform.right;
+        var right = _cameraTransform.right;
         right.y = 0f;
         return right;
     }
