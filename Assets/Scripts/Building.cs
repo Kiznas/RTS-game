@@ -20,7 +20,6 @@ public class Building : MonoBehaviour
 
     private const float RAYCAST_DISTANCE = 0.5f;
 
-
     private void Start()
     {
         SetID((byte)Random.Range(0, 255));

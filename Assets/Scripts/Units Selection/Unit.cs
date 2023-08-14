@@ -1,39 +1,42 @@
-
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 
-public class Unit : MonoBehaviour
+namespace Units_Selection
 {
-    private NavMeshAgent _agent;
-    [FormerlySerializedAs("IsSelected")] public bool isSelected;
-    void Start()
+    public class Unit : MonoBehaviour
     {
-        UnitSelections.Instance.unitlist.Add(this);
-        _agent = GetComponent<NavMeshAgent>();
-    }
+        private NavMeshAgent _agent;
+        public bool isSelected;
+        private Camera _camera;
 
-    void OnDestroy()
-    {
-        UnitSelections.Instance.unitlist.Remove(this);
-    }
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(1) && isSelected) // Left mouse button clicked
+        public void Start()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            _camera = Camera.main;
+            UnitSelections.Instance.unitList.Add(this);
+            _agent = GetComponent<NavMeshAgent>();
+        }
 
-            if (Physics.Raycast(ray, out hit))
+        void OnDestroy()
+        {
+            UnitSelections.Instance.unitList.Remove(this);
+        }
+
+        private void Update()
+        {
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            if (Input.GetMouseButtonDown(1) && isSelected) // Left mouse button clicked
             {
-                MoveToDestination(hit.point);
+                if (Physics.Raycast(ray, out var hit))
+                {
+                    MoveToDestination(hit.point);
+                }
             }
         }
-    }
 
-    private void MoveToDestination(Vector3 destination)
-    {
-        _agent.SetDestination(destination);
+        private void MoveToDestination(Vector3 destination)
+        {
+            _agent.SetDestination(destination);
+        }
     }
 }
+        

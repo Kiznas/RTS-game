@@ -1,39 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class UnitClick : MonoBehaviour
+namespace Units_Selection
 {
-    [FormerlySerializedAs("_camera")] [SerializeField] private Camera camera;
-
-    [FormerlySerializedAs("_clickable")] [SerializeField] private LayerMask clickable;
-
-    void Update()
+    public class UnitClick : MonoBehaviour
     {
-        if (Input.GetMouseButtonDown(0))
+        [SerializeField] private new Camera camera;
+        [SerializeField] private LayerMask clickable;
+
+        public void Update()
         {
-
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, clickable))
+            if (Input.GetMouseButtonDown(0))
             {
+                var ray = camera.ScreenPointToRay(Input.mousePosition);
 
-                if (Input.GetKey(KeyCode.LeftShift))
+                if (Physics.Raycast(ray, out var ratHit, Mathf.Infinity, clickable))
                 {
-                    UnitSelections.Instance.ShiftClickSelect(hit.collider.GetComponent<Unit>());
+
+                    if (Input.GetKey(KeyCode.LeftShift))
+                    {
+                        UnitSelections.Instance.ShiftClickSelect(ratHit.collider.GetComponent<Unit>());
+                    }
+                    else
+                    {
+                        UnitSelections.Instance.ClickSelect(ratHit.collider.GetComponent<Unit>());
+                    }
+
                 }
                 else
                 {
-                    UnitSelections.Instance.ClickSelect(hit.collider.GetComponent<Unit>());
-                }
-
-            }
-            else
-            {
-                if (!Input.GetKey(KeyCode.LeftShift))
-                {
-                    UnitSelections.Instance.DeselectAll();
+                    if (!Input.GetKey(KeyCode.LeftShift))
+                    {
+                        UnitSelections.Instance.DeselectAll();
+                    }
                 }
             }
         }
