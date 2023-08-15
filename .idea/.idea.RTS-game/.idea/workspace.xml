@@ -6,16 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="91116868-9244-4513-93ed-feb77c6a0ef7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ProPixelizer/ExampleAssets/ProPixelizerURP.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ProPixelizer/ExampleAssets/ProPixelizerURP.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/New Material 3.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/New Material 3.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/CameraController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/DragUnitSelect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/DragUnitSelect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitClick.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitClick.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/URP-Balanced.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/URP-Balanced.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/URP-Performant.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/URP-Performant.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsMaster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsMaster.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +34,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b41119cc6741409ea29f63c7f98de938172800/0e/32659ee2/Shader.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitBoids.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsMaster.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -67,7 +61,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.General&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -145,6 +139,8 @@
       <workItem from="1692032201230" duration="1304000" />
       <workItem from="1692033603307" duration="70000" />
       <workItem from="1692033778170" duration="1054000" />
+      <workItem from="1692110648267" duration="9302000" />
+      <workItem from="1692123077306" duration="2779000" />
     </task>
     <task id="LOCAL-00001" summary="Code refactoring">
       <option name="closed" value="true" />
