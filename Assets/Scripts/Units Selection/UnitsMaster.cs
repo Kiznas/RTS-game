@@ -1,4 +1,4 @@
- using Unity.Jobs;
+using Unity.Jobs;
  using System.Linq;
  using UnityEngine;
  using Unity.Burst;
@@ -6,47 +6,33 @@
  using Unity.Mathematics;
  using System.Collections.Generic;
 
- namespace Units_Selection {
+namespace Units_Selection {
     public class UnitsMaster : MonoBehaviour
     {
-        private Camera _camera;
         private List<Unit> _selectedUnits = new();
 
-        [SerializeField] private int numRows = 2; // Number of rows in the formation
+        private float _formationAngle;
+        private Vector3 _startPos;
+        
         [SerializeField] private float unitSpacing = 1.0f; // Spacing between units
         [SerializeField] private float formationDepth = 5.0f; // Depth of the formation box
         
         public void Start(){
-            _camera = Camera.main;
+            EventAggregator.Subscribe<SendAngle>(AngleReceive);
         }
 
-        private void Update()
+        public void OnDestroy()
         {
-            if (Input.GetMouseButtonDown(1)) 
-            {
-                var ray = _camera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out var hit))
-                {
-                    _selectedUnits = UnitSelections.Instance.unitSelectedList;
-                    if (_selectedUnits.Count > 0)
-                    {
-                        //TODO: Fix rotation so formation will face ray
-                        Transform firstSelectedUnit = _selectedUnits[_selectedUnits.Count / 2].transform;
-                        Vector3 hitDirection = hit.point - firstSelectedUnit.position;
-                        Quaternion targetRotation = Quaternion.LookRotation(hitDirection, Vector3.up);
-
-                        // Calculate the rotation angle for the entire formation
-                        float formationAngle = Quaternion.Angle(firstSelectedUnit.rotation, targetRotation);
-                        UpdatePositionsWithJobs(hit.point, -formationAngle);
-                    }
-                }
-                else
-                {
-                    UnitSelections.Instance.DeselectAll();
-                }
-            }
+            EventAggregator.Unsubscribe<SendAngle>(AngleReceive);
         }
 
+        private void AngleReceive(object arg1, SendAngle arg2)
+        {
+            _selectedUnits = UnitSelections.Instance.unitSelectedList;
+            _formationAngle = arg2.Angle;
+            _startPos = arg2.StartPos;
+            UpdatePositionsWithJobs(_startPos, _formationAngle);
+        }
         private void UpdatePositionsWithJobs(Vector3 destination, float angle)
         {
             var unitsNumber = _selectedUnits.Count;
@@ -56,6 +42,9 @@
 
             var unitsStartPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
             var unitsEndPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
+            
+            var numRows = (int)Mathf.Ceil(1.4f * Mathf.Sqrt(unitsNumber));
+            
             var jobData = new PositionUpdateJob
             {
                 NumRows = numRows,
