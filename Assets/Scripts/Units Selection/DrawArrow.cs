@@ -53,7 +53,7 @@ namespace Units_Selection
         {
             _endPoint = GetMouseWorldPosition();
             var angle = CalculateAngle(_startPos, _endPoint);
-            directionArrow.transform.eulerAngles = new Vector3(ROTATION_FIXER, -angle + ROTATION_FIXER * 2, 0);
+            directionArrow.transform.eulerAngles = new Vector3(ROTATION_FIXER, -angle + ROTATION_FIXER, 0);
         }
 
         private void FinishPlacingArrow()
@@ -74,7 +74,7 @@ namespace Units_Selection
         {
             var direction = endPoint - startPoint;
             var angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
-            return (angle + 360) % 360;
+            return (angle - ROTATION_FIXER + 360) % 360;
         }
     }
 }

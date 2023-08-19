@@ -18,11 +18,11 @@ namespace Units_Selection
 
                     if (Input.GetKey(KeyCode.LeftShift))
                     {
-                        UnitSelections.Instance.ShiftClickSelect(ratHit.collider.GetComponent<Unit>());
+                        UnitSelections.Instance.ShiftClickSelect(ratHit.collider.GetComponent<Transform>());
                     }
                     else
                     {
-                        UnitSelections.Instance.ClickSelect(ratHit.collider.GetComponent<Unit>());
+                        UnitSelections.Instance.ClickSelect(ratHit.collider.GetComponent<Transform>());
                     }
 
                 }

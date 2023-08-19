@@ -1,27 +1,22 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Units_Selection
 {
     public class Unit : MonoBehaviour{
-        
-        public NavMeshAgent agent;
         private Transform _childObj;
-        public bool isSelected;
-        
+
         public void Start(){
-            UnitSelections.Instance.unitList.Add(this);
-            agent = GetComponent<NavMeshAgent>();
-            _childObj = gameObject.transform.GetChild(0);
+            UnitSelections.Instance.unitList.Add(transform);
         }
 
         private void OnDestroy(){
-            UnitSelections.Instance.unitList.Remove(this);
+            UnitSelections.Instance.unitList.Remove(transform);
         }
 
-        public void UnitSelected(bool selected){
-            _childObj.gameObject.SetActive(selected);
-            isSelected = selected;
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = new Color(1, 0, 0, 0.5f);
+            Gizmos.DrawCube(transform.position, transform.localScale);
         }
     }
 }

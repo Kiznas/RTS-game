@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public static class EventAggregator
@@ -31,3 +32,7 @@ public static class EventAggregator
 //EVENTS//
 public class SendAngle{
     public int Angle; public Vector3 StartPos; }
+
+public class SendDestination{
+    public float3[] posArray;
+}

@@ -38,7 +38,6 @@ namespace Units_Selection
 
             if (Input.GetMouseButtonUp(0))
             {
-                Debug.Log("size" + boxVisual.sizeDelta);
                 if (boxVisual.sizeDelta is { x: >= 30, y: >= 30 })
                 {
                     SelectUnits();

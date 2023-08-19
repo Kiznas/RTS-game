@@ -9,7 +9,7 @@ using Unity.Jobs;
 namespace Units_Selection {
     public class UnitsMaster : MonoBehaviour
     {
-        private List<Unit> _selectedUnits = new();
+        private List<Transform> _selectedUnits = new();
 
         private float _formationAngle;
         private Vector3 _startPos;
@@ -33,6 +33,7 @@ namespace Units_Selection {
             _startPos = arg2.StartPos;
             UpdatePositionsWithJobs(_startPos, _formationAngle);
         }
+
         private void UpdatePositionsWithJobs(Vector3 destination, float angle)
         {
             var unitsNumber = _selectedUnits.Count;
@@ -42,16 +43,16 @@ namespace Units_Selection {
 
             var unitsStartPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
             var unitsEndPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
-            
-            var numRows = (int)Mathf.Ceil(1.4f * Mathf.Sqrt(unitsNumber));
-            
+
+            var numRows = (int)Mathf.Ceil(0.5f * Mathf.Sqrt(unitsNumber));
+
             var jobData = new PositionUpdateJob
             {
                 NumRows = numRows,
                 UnitSpacing = unitSpacing,
                 FormationDepth = formationDepth,
                 Destination = destination,
-                SelectedUnitsStartPos =  unitsStartPos,
+                SelectedUnitsStartPos = unitsStartPos,
                 SelectedUnitsEndPos = unitsEndPos,
                 FormationAngle = angle
             };
@@ -60,16 +61,13 @@ namespace Units_Selection {
             var jobHandle = jobData.Schedule(unitsNumber, 64);
             jobHandle.Complete();
 
-            for (var i = 0; i < unitsEndPos.Length; i++)
-            {
-                _selectedUnits[i].agent.SetDestination(unitsEndPos[i]);
-            }
+            EventAggregator.Post(this, new SendDestination { posArray = unitsEndPos.ToArray()});
 
             // Dispose of the NativeArray
             unitsStartPos.Dispose();
             unitsEndPos.Dispose();
         }
-        
+
         [BurstCompile]
         private struct PositionUpdateJob : IJobParallelFor
         {
