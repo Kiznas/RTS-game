@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using Units_Selection;
-using Unity.Burst;
-using Unity.Collections;
-using Unity.Jobs;
-using Unity.Mathematics;
 using UnityEngine;
+using Unity.Burst;
+using Units_Selection;
 using UnityEngine.Jobs;
+using Unity.Collections;
 
 public class MeshRendering : MonoBehaviour
 {
@@ -13,78 +10,92 @@ public class MeshRendering : MonoBehaviour
     public Material material;
     public Material selectedMaterial;
 
-    public bool ready;
-
     private RenderParams _renderParamsReg;
     private RenderParams _renderParamsSelected;
 
-    private static List<Transform> Unselected => UnitSelections.Instance.unselectedUnits;
-    private static List<Transform> Selected => UnitSelections.Instance.unitSelectedList;
+    private readonly Vector3 _meshOffset = new(0, 0.5f, 0);
 
-    [ContextMenu("Start")]
+    private static Transform[] Unselected => UnitSelections.Instance.unselectedUnits;
+    private static Transform[] Selected => UnitSelections.Instance.unitSelectedList;
+    
+    private int _previousUnselectedCount = -1;
+    private int _previousSelectedCount = -1;
+    
+    private TransformAccessArray _selectedTransformAccess;
+    private TransformAccessArray _unselectedTransformAccess;
+
     private void Start()
     {
         _renderParamsReg = new RenderParams(material);
         _renderParamsSelected = new RenderParams(selectedMaterial);
-        ready = true;
     }
 
     private void Update()
     {
-        if (ready)
-        {
-            RenderUnselected();
-            RenderSelected();
-        }
+        RenderUnselected();
+        RenderSelected();
     }
 
     private void RenderUnselected()
     {
-        if (Unselected.Count > 0)
+        var unselectedCount = Unselected.Length;
+        if (unselectedCount > 0)
         {
-            var unselected = Unselected;
-            Transform[] array = new Transform[unselected.Count];
-            unselected.CopyTo(array);
-            TransformAccessArray transformAccessArray = new TransformAccessArray(array);
-            for (int i = 0; i > unselected.Count; i++)
+            if (unselectedCount != _previousUnselectedCount)
             {
-                transformAccessArray.Add(unselected[i]);
+                _previousUnselectedCount = unselectedCount;
+                
+                if (!_unselectedTransformAccess.isCreated){
+                    _unselectedTransformAccess = new TransformAccessArray(unselectedCount);
+                }
+                
+                _unselectedTransformAccess.SetTransforms(Unselected);
             }
-            UpdateTransformMatricesJob job = new UpdateTransformMatricesJob
-            {
-                Matrices = new NativeArray<Matrix4x4>(unselected.Count, Allocator.TempJob)
+
+            var matrices = new NativeArray<Matrix4x4>(unselectedCount, Allocator.TempJob);
+
+            var job = new UpdateTransformMatricesJob {
+                Matrices = matrices,
+                Offset = _meshOffset
             };
 
-            JobHandle handle = job.Schedule(transformAccessArray);
+            var handle = job.Schedule(_unselectedTransformAccess);
             handle.Complete();
-            
-            Graphics.RenderMeshInstanced(_renderParamsReg, mesh, 0, job.Matrices, unselected.Count);
 
-            transformAccessArray.Dispose();
-            job.Matrices.Dispose();
+            Graphics.RenderMeshInstanced(_renderParamsReg, mesh, 0, matrices, unselectedCount);
+            
+            matrices.Dispose();
         }
     }
 
     private void RenderSelected()
     {
-        if (Selected.Count > 0)
+        var selectedCount = Selected.Length;
+        if (selectedCount > 0)
         {
-            var selected = Selected;
-            Transform[] array = new Transform[selected.Count];
-            selected.CopyTo(array);
-            TransformAccessArray transformAccessArray = new TransformAccessArray(array);
-            UpdateTransformMatricesJob job = new UpdateTransformMatricesJob
+            if (selectedCount != _previousSelectedCount)
             {
-                Matrices = new NativeArray<Matrix4x4>(selected.Count, Allocator.TempJob)
+                _previousSelectedCount = selectedCount;
+                
+                if (!_selectedTransformAccess.isCreated){
+                    _selectedTransformAccess = new TransformAccessArray(_previousSelectedCount);
+                }
+                _selectedTransformAccess.SetTransforms(Selected);
+            }
+            
+            var matrices = new NativeArray<Matrix4x4>(selectedCount, Allocator.TempJob);
+            var job = new UpdateTransformMatricesJob{
+                Matrices = matrices,
+                Offset = _meshOffset
             };
 
-            JobHandle handle = job.Schedule(transformAccessArray);
+            var handle = job.Schedule(_selectedTransformAccess);
             handle.Complete();
-            
-            Graphics.RenderMeshInstanced(_renderParamsSelected, mesh, 0, job.Matrices, selected.Count);
 
-            transformAccessArray.Dispose();
-            job.Matrices.Dispose();
+            Graphics.RenderMeshInstanced(_renderParamsSelected, mesh, 0, matrices, selectedCount);
+
+            
+            matrices.Dispose();
         }
     }
 }
@@ -93,13 +104,11 @@ public class MeshRendering : MonoBehaviour
 public struct UpdateTransformMatricesJob : IJobParallelForTransform
 {
     public NativeArray<Matrix4x4> Matrices;
+    public Vector3 Offset;
+
     public void Execute(int index, TransformAccess transform)
     {
-        Matrices[index] = Matrix4x4.TRS(transform.position,
-            transform.rotation, new float3(1, 1 , 1));
+        Matrices[index] = Matrix4x4.TRS(transform.position + Offset,
+            transform.rotation, transform.localScale);
     }
 }
-
-
-
-

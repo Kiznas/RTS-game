@@ -91,7 +91,7 @@ namespace Units_Selection
             //TODO: Refactor this code
             var unitList = UnitSelections.Instance.unitList
                 .Where(item => _selectionBox.Contains(camera.WorldToScreenPoint(item.transform.position)))
-                .ToList();
+                .ToArray();
             UnitSelections.Instance.DragSelect(unitList);
         }
     }

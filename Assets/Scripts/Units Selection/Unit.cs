@@ -3,14 +3,13 @@ using UnityEngine;
 namespace Units_Selection
 {
     public class Unit : MonoBehaviour{
-        private Transform _childObj;
 
         public void Start(){
-            UnitSelections.Instance.unitList.Add(transform);
+            UnitSelections.Instance.AddElement(ref UnitSelections.Instance.unitList, transform);
         }
 
         private void OnDestroy(){
-            UnitSelections.Instance.unitList.Remove(transform);
+            UnitSelections.Instance.RemoveElement(ref UnitSelections.Instance.unitList, transform);
         }
 
         private void OnDrawGizmos()

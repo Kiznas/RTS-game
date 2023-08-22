@@ -1,3 +1,4 @@
+using System;
 using Unity.Jobs;
  using System.Linq;
  using UnityEngine;
@@ -9,7 +10,7 @@ using Unity.Jobs;
 namespace Units_Selection {
     public class UnitsMaster : MonoBehaviour
     {
-        private List<Transform> _selectedUnits = new();
+        private Transform[] _selectedUnits = Array.Empty<Transform>();
 
         private float _formationAngle;
         private Vector3 _startPos;
@@ -36,9 +37,9 @@ namespace Units_Selection {
 
         private void UpdatePositionsWithJobs(Vector3 destination, float angle)
         {
-            var unitsNumber = _selectedUnits.Count;
+            var unitsNumber = _selectedUnits.Length;
 
-            var positions = new List<float3>(_selectedUnits.Count);
+            var positions = new List<float3>(_selectedUnits.Length);
             positions.AddRange(_selectedUnits.Select(unit => unit.transform.position).Select(dummy => (float3)dummy));
 
             var unitsStartPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
