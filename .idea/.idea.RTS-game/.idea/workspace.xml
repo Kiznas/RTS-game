@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91116868-9244-4513-93ed-feb77c6a0ef7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/shelf/Uncommitted_changes_before_Update_at_14_08_2023_4_33_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/shelf/Uncommitted_changes_before_Update_at_14_08_2023_4_33__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MeshRendering.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MeshRendering.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/DragUnitSelect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/DragUnitSelect.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsMaster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsMaster.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +35,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b41119cc6741409ea29f63c7f98de938172800/0e/32659ee2/Shader.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b41119cc6741409ea29f63c7f98de938172800/48/c9958413/Graphics.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b41119cc6741409ea29f63c7f98de938172800/78/9d49b95a/IJobParallelForTransformExtensions.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/Desktop/MeshRendering.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/EventAggregator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/MeshRendering.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs" root0="FORCE_HIGHLIGHTING" />
@@ -162,6 +156,9 @@
       <workItem from="1692623493207" duration="13819000" />
       <workItem from="1692656888524" duration="12490000" />
       <workItem from="1692710415411" duration="4950000" />
+      <workItem from="1693242993603" duration="70000" />
+      <workItem from="1693247013527" duration="65000" />
+      <workItem from="1693253784076" duration="4884000" />
     </task>
     <task id="LOCAL-00001" summary="Code refactoring">
       <option name="closed" value="true" />

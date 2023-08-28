@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -11,8 +10,8 @@ namespace Units_Selection
     public class MoveJobSystem : MonoBehaviour
     {
         public float moveSpeed = 1f;
-        private readonly List<Transform> _unitsTransforms = new();
-        private readonly List<float3> _unitsDestinations = new();
+        public  List<Transform> _unitsTransforms = new();
+        public  List<float3> _unitsDestinations = new();
         private TransformAccessArray _transformAccessArray;
 
         private void Start()
@@ -43,7 +42,7 @@ namespace Units_Selection
                     _unitsDestinations.RemoveAt(destinationIndex);
                 }
             }
-    
+
             _unitsTransforms.AddRange(selectedUnitsSet);
             _unitsDestinations.AddRange(destinations);
         }
@@ -54,7 +53,7 @@ namespace Units_Selection
             {
                 _transformAccessArray.SetTransforms(_unitsTransforms.ToArray());
             }
-            
+
             if (_transformAccessArray.length > 0)
             {
                 MoveJobHandler(_transformAccessArray);
@@ -65,31 +64,33 @@ namespace Units_Selection
         {
             if (transformAccessArray.length > 0 && _unitsDestinations.Count > 0)
             {
+                var unitsToDelete = new NativeQueue<int>(Allocator.TempJob);
                 var moveJob = new MoveJob
                 {
                     MoveSpeed = moveSpeed,
                     DeltaTime = Time.deltaTime,
-                    TargetPositions = _unitsDestinations.ToNativeArray(Allocator.Persistent)
+                    TargetPositions = _unitsDestinations.ToNativeArray(Allocator.Persistent),
+                    UnitsToDelete = unitsToDelete
                 };
 
                 var moveJobHandle = moveJob.Schedule(transformAccessArray);
                 moveJobHandle.Complete();
-                if (moveJobHandle.IsCompleted)
-                {
-                    CheckAndRemoveCompleted();
-                }
+                CheckAndRemoveCompleted(unitsToDelete);
+                
+
                 moveJob.TargetPositions.Dispose();
+                unitsToDelete.Dispose();
             }
         }
 
-        private void CheckAndRemoveCompleted()
+        private void CheckAndRemoveCompleted(NativeQueue<int> unitsToDelete)
         {
-            for (var i = 0; i < _unitsTransforms.Count; i++)
+            while (unitsToDelete.TryDequeue(out var unit))
             {
-                if (math.distance(_unitsTransforms[i].position, _unitsDestinations[i]) < 0.01f)
+                if (unit < _unitsTransforms.Count)
                 {
-                    _unitsTransforms.RemoveAt(i);
-                    _unitsDestinations.RemoveAt(i);
+                    _unitsTransforms.RemoveAt(unit);
+                    _unitsDestinations.RemoveAt(unit);
                 }
             }
         }
@@ -100,11 +101,16 @@ namespace Units_Selection
             public float MoveSpeed;
             public float DeltaTime;
             public NativeArray<float3> TargetPositions;
+            [NativeDisableParallelForRestriction] public NativeQueue<int> UnitsToDelete;
 
             public void Execute(int index, TransformAccess transform)
             {
                 var step = MoveSpeed * DeltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, TargetPositions[index], step);
+                if (Vector3.Distance(transform.position, TargetPositions[index]) < 0.1f && step >= Vector3.Distance(transform.position, TargetPositions[index]))
+                {
+                    UnitsToDelete.Enqueue(index);
+                }
             }
         }
     }
