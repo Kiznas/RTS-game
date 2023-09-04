@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using NavJob.Systems;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Jobs;
 
@@ -13,6 +15,7 @@ namespace Units_Selection
         private readonly List<Transform> _unitsTransforms = new();
         private readonly List<float3> _unitsDestinations = new();
         private TransformAccessArray _transformAccessArray;
+        [SerializeField] private GameObject _cubePrefab;
 
         private void Start()
         {
@@ -42,10 +45,31 @@ namespace Units_Selection
                     _unitsDestinations.RemoveAt(destinationIndex);
                 }
             }
+
+            var id = 0;
+            foreach (var unit in selectedUnitsSet)
+            {
+                NavMeshQuerySystem.RequestPathStatic(id, unit.position, destinations[id]);
+            }
+
+            NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(DoSomething);
+            
+            
             _unitsTransforms.AddRange(selectedUnitsSet);
             _unitsDestinations.AddRange(destinations);
             _transformAccessArray.SetTransforms(_unitsTransforms.ToArray());
         }
+
+        private void DoSomething(int id, Vector3[] corners)
+        {
+            Debug.Log($"ID: {id}, Vectors =>");
+            foreach (var vector in corners)
+            {
+                Instantiate(_cubePrefab, vector, quaternion.identity);
+            }
+        }
+        
+        
 
         private void Update()
         {
@@ -67,7 +91,6 @@ namespace Units_Selection
                     TargetPositions = unitsDestination
                 };
                 
-                
                 var moveJobHandle = moveJob.Schedule(transformAccessArray);
                 moveJobHandle.Complete();
                 
@@ -80,6 +103,7 @@ namespace Units_Selection
             }
         }
 
+        [BurstCompile]
         private void CheckAndRemoveCompleted()
         {
             for (var i = 0; i < _unitsTransforms.Count; i++)
