@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Experimental.AI;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Experimental.AI;
 
-namespace NavJob.Systems
+namespace NavJob
 {
     public enum PathfindingFailedReason
     {
@@ -24,17 +24,17 @@ namespace NavJob.Systems
         /// <summary>
         /// How many navmesh queries are run on each update.
         /// </summary>
-        public int maxQueries = 256;
+        public int maxQueries = 526;
 
         /// <summary>
         /// Maximum path size of each query
         /// </summary>
-        public int maxPathSize = 1024;
+        public int maxPathSize = 2048;
 
         /// <summary>
         /// Maximum iteration on each update cycle
         /// </summary>
-        public int maxIterations = 1024;
+        public int maxIterations = 2048;
 
         /// <summary>
         /// Max map width
@@ -67,16 +67,15 @@ namespace NavJob.Systems
                 if (_instance == null)
                 {
                     _instance = FindObjectOfType<NavMeshQuerySystem>();
-                    Debug.Log(_instance);
                 }
                 return _instance;
             }
         }
-        public delegate void SuccessQueryDelegate (int id, Vector3[] corners);
+        public delegate void SuccessQueryDelegate (int id, List<float3> corners);
         public delegate void FailedQueryDelegate (int id, PathfindingFailedReason reason);
         private SuccessQueryDelegate _pathResolvedCallbacks;
         private FailedQueryDelegate _pathFailedCallbacks;
-        private readonly ConcurrentDictionary<int, Vector3[]> _cachedPaths = new();
+        private readonly ConcurrentDictionary<int, List<float3>> _cachedPaths = new();
 
         private struct PathQueryData
         {
@@ -117,7 +116,7 @@ namespace NavJob.Systems
             var key = GetKey ((int) from.x, (int) from.z, (int) to.x, (int) to.z);
             if (useCache)
             {
-                if (_cachedPaths.TryGetValue (key, out Vector3[] waypoints))
+                if (_cachedPaths.TryGetValue (key, out List<float3> waypoints))
                 {
                     _pathResolvedCallbacks?.Invoke (id, waypoints);
                     return;
@@ -173,6 +172,7 @@ namespace NavJob.Systems
             Instance.PurgeCache ();
         }
 
+        [BurstCompile]
         private struct UpdateQueryStatusJob : IJob
         {
             public NavMeshQuery Query;
@@ -225,7 +225,6 @@ namespace NavJob.Systems
                         }
                         else
                         {
-                            Debug.LogWarning(pathStatus);
                             Statuses[0] = 1;
                             Statuses[1] = 2;
                         }
@@ -236,7 +235,6 @@ namespace NavJob.Systems
                     }
                     else
                     {
-                        Debug.LogWarning(endStatus);
                         Statuses[0] = 1;
                         Statuses[1] = 2;
                     }
@@ -256,7 +254,7 @@ namespace NavJob.Systems
             {
                 if (_queryQueue.TryDequeue (out PathQueryData pending))
                 {
-                    if (useCache && _cachedPaths.TryGetValue (pending.Key, out Vector3[] waypoints))
+                    if (useCache && _cachedPaths.TryGetValue (pending.Key, out List<float3> waypoints))
                     {
                         _pathResolvedCallbacks?.Invoke (pending.ID, waypoints);
                     }
@@ -324,10 +322,10 @@ namespace NavJob.Systems
                 {
                     if (job.Statuses[1] == 1)
                     {
-                        var waypoints = new Vector3[job.Statuses[2]];
+                        var waypoints = new List<float3>();
                         for (int k = 0; k < job.Statuses[2]; k++)
                         {
-                            waypoints[k] = job.Results[k].position;
+                            waypoints.Add(new float3(job.Results[k].position.x,job.Results[k].position.y, job.Results[k].position.z));
                         }
                         if (useCache)
                         {
@@ -482,7 +480,7 @@ namespace NavJob.Systems
             var apexIndex = 0;
             var n = 1;
 
-            if (pathSize > 1)
+            if (pathSize >= 1)
             {
                 var startPolyWorldToLocal = query.PolygonWorldToLocalMatrix (path[0]);
 

@@ -1,26 +1,26 @@
-using System.Collections.Generic;
-using NavJob.Systems;
+using NavJob;
 using Unity.Burst;
-using Unity.Collections;
-using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Jobs;
+using Unity.Collections;
+using Unity.Mathematics;
+using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace Units_Selection
 {
     public class MoveJobSystem : MonoBehaviour
     {
         public float moveSpeed = 1f;
-        private readonly List<Transform> _unitsTransforms = new();
-        private readonly List<float3> _unitsDestinations = new();
+        private List<UnitMovementStruct> _units;
         private TransformAccessArray _transformAccessArray;
-        [SerializeField] private GameObject _cubePrefab;
+        private static int _lastAssignedID;
 
         private void Start()
         {
             EventAggregator.Subscribe<SendDestination>(SetDestination);
             _transformAccessArray = new TransformAccessArray(40000);
+            _units = new List<UnitMovementStruct>(40000);
         }
 
         private void OnDestroy()
@@ -34,42 +34,40 @@ namespace Units_Selection
             var selectedUnitsSet = new HashSet<Transform>(UnitSelections.Instance.unitSelectedList);
             var destinations = unitsDestination.posArray;
 
-            for (int i = _unitsTransforms.Count - 1; i >= 0; i--)
+            for (int i = _transformAccessArray.length - 1; i >= 0; i--)
             {
-                if (selectedUnitsSet.Contains(_unitsTransforms[i]))
+                if (selectedUnitsSet.Contains(_transformAccessArray[i].transform))
                 {
-                    int destinationIndex = i < _unitsDestinations.Count ? i : _unitsDestinations.Count - 1;
-
-                    // Remove both the unit and its corresponding destination.
-                    _unitsTransforms.RemoveAt(i);
-                    _unitsDestinations.RemoveAt(destinationIndex);
+                    _units.RemoveAtSwapBack(i);
+                    _transformAccessArray.RemoveAtSwapBack(i);
                 }
             }
 
-            var id = 0;
+            var index = 0;
             foreach (var unit in selectedUnitsSet)
             {
-                NavMeshQuerySystem.RequestPathStatic(id, unit.position, destinations[id]);
+                UnitMovementStruct newUnit = new UnitMovementStruct{
+                    ID = index };
+                
+                _units.Add(newUnit);
+                _transformAccessArray.Add(unit);
+                NavMeshQuerySystem.RequestPathStatic(newUnit.ID, unit.position, destinations[index]);
+                index++;
             }
 
-            NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(DoSomething);
-            
-            
-            _unitsTransforms.AddRange(selectedUnitsSet);
-            _unitsDestinations.AddRange(destinations);
-            _transformAccessArray.SetTransforms(_unitsTransforms.ToArray());
+            NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(AddWaypoints);
         }
 
-        private void DoSomething(int id, Vector3[] corners)
+        private void AddWaypoints(int id, List<float3> corners)
         {
-            Debug.Log($"ID: {id}, Vectors =>");
-            foreach (var vector in corners)
+            var movementStruct = _units[id];
+            movementStruct.DestinationPoints = new UnsafeList<float3>(corners.Count, Allocator.TempJob);
+            for (int i = 1; i < corners.Count; i++)
             {
-                Instantiate(_cubePrefab, vector, quaternion.identity);
+                movementStruct.DestinationPoints.Add(corners[i]);
             }
+            _units[id] = movementStruct;
         }
-        
-        
 
         private void Update()
         {
@@ -81,14 +79,18 @@ namespace Units_Selection
 
         private void MoveJobHandler(TransformAccessArray transformAccessArray)
         {
-            if (transformAccessArray.length > 0 && _unitsDestinations.Count > 0)
+            if (transformAccessArray.length > 0 && _units.Count > 0)
             {
-                var unitsDestination = new NativeArray<float3>(_unitsDestinations.ToArray(), Allocator.TempJob);
+                var unsafeList = new UnsafeList<UnitMovementStruct>(_units.Count, Allocator.TempJob);
+                foreach (var unit in _units)
+                {
+                    unsafeList.Add(unit);
+                }
                 var moveJob = new MoveJob
                 {
                     MoveSpeed = moveSpeed,
                     DeltaTime = Time.deltaTime,
-                    TargetPositions = unitsDestination
+                    Units = unsafeList
                 };
                 
                 var moveJobHandle = moveJob.Schedule(transformAccessArray);
@@ -99,20 +101,23 @@ namespace Units_Selection
                     CheckAndRemoveCompleted();
                 }
                 
-                unitsDestination.Dispose();
+                unsafeList.Dispose();
             }
         }
 
         [BurstCompile]
         private void CheckAndRemoveCompleted()
         {
-            for (var i = 0; i < _unitsTransforms.Count; i++)
+            for (var i = 0; i < _transformAccessArray.length; i++)
             {
-                if (Vector3.Distance(_unitsTransforms[i].position, _unitsDestinations[i]) < 0.01f)
+                if (_units[i].DestinationPoints.Length > 0)
                 {
-                    _unitsTransforms.RemoveAtSwapBack(i);
-                    _unitsDestinations.RemoveAtSwapBack(i);
-                    _transformAccessArray.RemoveAtSwapBack(i);
+                    if (Vector3.Distance(_transformAccessArray[i].position, _units[i].DestinationPoints[^1]) < 0.01f)
+                    {
+                        _units[i].DestinationPoints.Dispose();
+                        _units.RemoveAtSwapBack(i);
+                        _transformAccessArray.RemoveAtSwapBack(i);
+                    }
                 }
             }
         }
@@ -122,13 +127,25 @@ namespace Units_Selection
         {
             public float MoveSpeed;
             public float DeltaTime;
-            public NativeArray<float3> TargetPositions;
+            [NativeDisableParallelForRestriction]
+            public UnsafeList<UnitMovementStruct> Units;
 
             public void Execute(int index, TransformAccess transform)
             {
                 var step = MoveSpeed * DeltaTime; 
-                transform.position = Vector3.MoveTowards(transform.position, TargetPositions[index], step);
+                transform.position = Vector3.MoveTowards(transform.position, Units[index].DestinationPoints[0], step);
+                if (Units[index].DestinationPoints.Length > 0 && Vector3.Distance(transform.position, Units[index].DestinationPoints[0]) < 0.01f)
+                {
+                    Units[index].DestinationPoints.RemoveAt(0);
+                    Debug.Log("deleted");
+                }
             }
+        }
+
+        private struct UnitMovementStruct
+        {
+            public UnsafeList<float3> DestinationPoints;
+            public int ID;
         }
     }
 }
