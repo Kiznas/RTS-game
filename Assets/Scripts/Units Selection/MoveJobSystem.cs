@@ -58,13 +58,13 @@ namespace Units_Selection
             NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(AddWaypoints);
         }
 
-        private void AddWaypoints(int id, List<float3> corners)
+        private void AddWaypoints(int id, List<float3> points)
         {
             var movementStruct = _units[id];
-            movementStruct.DestinationPoints = new UnsafeList<float3>(corners.Count, Allocator.TempJob);
-            for (int i = 1; i < corners.Count; i++)
+            movementStruct.DestinationPoints = new UnsafeList<float3>(points.Count, Allocator.Persistent);
+            foreach (var point in points)
             {
-                movementStruct.DestinationPoints.Add(corners[i]);
+                movementStruct.DestinationPoints.Add(point);
             }
             _units[id] = movementStruct;
         }
@@ -127,17 +127,18 @@ namespace Units_Selection
         {
             public float MoveSpeed;
             public float DeltaTime;
-            [NativeDisableParallelForRestriction]
             public UnsafeList<UnitMovementStruct> Units;
 
             public void Execute(int index, TransformAccess transform)
             {
-                var step = MoveSpeed * DeltaTime; 
-                transform.position = Vector3.MoveTowards(transform.position, Units[index].DestinationPoints[0], step);
-                if (Units[index].DestinationPoints.Length > 0 && Vector3.Distance(transform.position, Units[index].DestinationPoints[0]) < 0.01f)
+                if (Units[index].DestinationPoints.Length > 0)
                 {
-                    Units[index].DestinationPoints.RemoveAt(0);
-                    Debug.Log("deleted");
+                    var step = MoveSpeed * DeltaTime; 
+                    transform.position = Vector3.MoveTowards(transform.position, Units[index].DestinationPoints[0], step);
+                    if (Vector3.Distance(transform.position, Units[index].DestinationPoints[0]) < 0.01f)
+                    {
+                        Units[index].DestinationPoints.RemoveAt(0);
+                    }
                 }
             }
         }
