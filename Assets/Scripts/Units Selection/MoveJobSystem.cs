@@ -34,6 +34,9 @@ namespace Units_Selection
             var selectedUnitsSet = new HashSet<Transform>(UnitSelections.Instance.unitSelectedList);
             var destinations = unitsDestination.posArray;
 
+            // Clear the dictionary when starting a new destination calculation
+            _unitIndexMap.Clear();
+
             for (int i = _transformAccessArray.length - 1; i >= 0; i--)
             {
                 if (selectedUnitsSet.Contains(_transformAccessArray[i].transform))
@@ -46,11 +49,17 @@ namespace Units_Selection
             var index = 0;
             foreach (var unit in selectedUnitsSet)
             {
-                UnitMovementStruct newUnit = new UnitMovementStruct{
-                    ID = index };
-                
+                UnitMovementStruct newUnit = new UnitMovementStruct
+                {
+                    ID = _lastAssignedID++
+                };
+
                 _units.Add(newUnit);
                 _transformAccessArray.Add(unit);
+
+                // Update the dictionary with the new unit's index
+                _unitIndexMap[newUnit.ID] = _units.Count - 1;
+
                 NavMeshQuerySystem.RequestPathStatic(newUnit.ID, unit.position, destinations[index]);
                 index++;
             }
@@ -58,16 +67,34 @@ namespace Units_Selection
             NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(AddWaypoints);
         }
 
+
+        private readonly Dictionary<int, int> _unitIndexMap = new();
+
         private void AddWaypoints(int id, List<float3> points)
         {
-            var movementStruct = _units[id];
-            movementStruct.DestinationPoints = new UnsafeList<float3>(points.Count, Allocator.Persistent);
-            foreach (var point in points)
+            if (_unitIndexMap.TryGetValue(id, out var indexToUpdate))
             {
-                movementStruct.DestinationPoints.Add(point);
+                if (indexToUpdate < _units.Count)
+                {
+                    var movementStruct = _units[indexToUpdate];
+                    movementStruct.DestinationPoints.Clear();
+
+                    movementStruct.DestinationPoints = new UnsafeList<float3>(points.Count, Allocator.Persistent);
+
+                    foreach (var point in points)
+                    {
+                        movementStruct.DestinationPoints.Add(point);
+                    }
+
+                    _units[indexToUpdate] = movementStruct;
+                }
             }
-            _units[id] = movementStruct;
+            else
+            {
+                Debug.LogWarning($"ID {id} not found in _units list.");
+            }
         }
+
 
         private void Update()
         {
@@ -108,7 +135,7 @@ namespace Units_Selection
         [BurstCompile]
         private void CheckAndRemoveCompleted()
         {
-            for (var i = 0; i < _transformAccessArray.length; i++)
+            for (var i = 0; i < _units.Count; i++)
             {
                 if (_units[i].DestinationPoints.Length > 0)
                 {
