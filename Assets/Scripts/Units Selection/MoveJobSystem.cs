@@ -41,6 +41,7 @@ namespace Units_Selection
             {
                 if (selectedUnitsSet.Contains(_transformAccessArray[i].transform))
                 {
+                    _units[i].DestinationPoints.Clear();
                     _units.RemoveAtSwapBack(i);
                     _transformAccessArray.RemoveAtSwapBack(i);
                 }
@@ -51,13 +52,13 @@ namespace Units_Selection
             {
                 UnitMovementStruct newUnit = new UnitMovementStruct
                 {
-                    ID = _lastAssignedID++
+                    ID = _lastAssignedID++,
+                    DestinationPoints = new UnsafeList<float3>(30, Allocator.Persistent)
                 };
 
                 _units.Add(newUnit);
                 _transformAccessArray.Add(unit);
-
-                // Update the dictionary with the new unit's index
+                
                 _unitIndexMap[newUnit.ID] = _units.Count - 1;
 
                 NavMeshQuerySystem.RequestPathStatic(newUnit.ID, unit.position, destinations[index]);
@@ -77,10 +78,7 @@ namespace Units_Selection
                 if (indexToUpdate < _units.Count)
                 {
                     var movementStruct = _units[indexToUpdate];
-                    movementStruct.DestinationPoints.Clear();
-
-                    movementStruct.DestinationPoints = new UnsafeList<float3>(points.Count, Allocator.Persistent);
-
+                    movementStruct.DestinationPoints.Clear();   
                     foreach (var point in points)
                     {
                         movementStruct.DestinationPoints.Add(point);
@@ -137,9 +135,10 @@ namespace Units_Selection
         {
             for (var i = 0; i < _units.Count; i++)
             {
-                if (_units[i].DestinationPoints.Length > 0)
+                var destinationsLength = _units[i].DestinationPoints.Length;
+                if (destinationsLength is > 0 and 1)
                 {
-                    if (Vector3.Distance(_transformAccessArray[i].position, _units[i].DestinationPoints[^1]) < 0.01f)
+                    if (Vector3.Distance(_transformAccessArray[i].position, _units[i].DestinationPoints[0]) < 0.01f)
                     {
                         _units[i].DestinationPoints.Dispose();
                         _units.RemoveAtSwapBack(i);
