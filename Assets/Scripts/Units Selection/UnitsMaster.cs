@@ -43,7 +43,7 @@ namespace Units_Selection {
             positions.AddRange(_selectedUnits.Select(unit => unit.transform.position).Select(dummy => (float3)dummy));
 
             var unitsStartPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
-            var unitsEndPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
+            var unitsEndPos = new NativeArray<float3>(positions.Count, Allocator.TempJob);
 
             var numRows = (int)Mathf.Ceil(0.5f * Mathf.Sqrt(unitsNumber));
 
@@ -62,7 +62,7 @@ namespace Units_Selection {
             var jobHandle = jobData.Schedule(unitsNumber, 64);
             jobHandle.Complete();
 
-            EventAggregator.Post(this, new SendDestination { posArray = unitsEndPos.ToArray()});
+            EventAggregator.Post(this, new SendDestination { PosArray = unitsEndPos , FormationAngle = _formationAngle});
 
             // Dispose of the NativeArray
             unitsStartPos.Dispose();

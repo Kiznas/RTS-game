@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -34,5 +35,6 @@ public class SendAngle{
     public int Angle; public Vector3 StartPos; }
 
 public class SendDestination{
-    public float3[] posArray;
+    public NativeArray<float3> PosArray;
+    public float FormationAngle;
 }
