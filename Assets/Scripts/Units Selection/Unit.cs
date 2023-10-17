@@ -9,7 +9,7 @@ namespace Units_Selection
         }
 
         private void OnDestroy(){
-            UnitSelections.Instance.RemoveElement(UnitSelections.Instance.UnitList, transform);
+            UnitSelections.Instance.RemoveElement( UnitSelections.Instance.UnitList, transform);
         }
 
         private void OnDrawGizmos()

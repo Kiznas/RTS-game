@@ -39,7 +39,7 @@ namespace Units_Selection
             // Clear the dictionary when starting a new destination calculation
             _unitIndexMap.Clear();
 
-            for (int i = _transformAccessArray.length - 1; i >= 0; i--)
+            for (int i = 0; i < _transformAccessArray.length; i++)
             {
                 if (selectedUnitsSet.Contains(_transformAccessArray[i].transform))
                 {
@@ -104,6 +104,7 @@ namespace Units_Selection
             if (_transformAccessArray.length > 0)
             {
                 MoveJobHandler(_transformAccessArray);
+                Debug.Log(_transformAccessArray.length);
             }
         }
 
@@ -147,7 +148,6 @@ namespace Units_Selection
                     _units[i].DestinationPoints.Dispose();
                     _units.RemoveAtSwapBack(i);
                     _transformAccessArray.RemoveAtSwapBack(i);
-                    break;
                 }
             }
         }
