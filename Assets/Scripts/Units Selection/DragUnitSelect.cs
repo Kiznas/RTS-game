@@ -1,18 +1,17 @@
 using UnityEngine;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Units_Selection
 {
     public class DragUnitSelect : MonoBehaviour
     {
         [SerializeField] private new Camera camera;
-
         [SerializeField] private RectTransform boxVisual;
 
         private Rect _selectionBox;
-
         private Vector2 _startPosition;
         private Vector2 _endPosition;
+        private List<Transform> _unitsList;
 
         private void Start()
         {
@@ -64,35 +63,21 @@ namespace Units_Selection
 
         private void DrawSelection()
         {
-            if(Input.mousePosition.x < _startPosition.x)
-            {
-                _selectionBox.xMin = Input.mousePosition.x;
-                _selectionBox.xMax = _startPosition.x;
-            }
-            else
-            {
-                _selectionBox.xMin = _startPosition.x;
-                _selectionBox.xMax = Input.mousePosition.x;
-            }
+            _selectionBox.xMin = Mathf.Min(Input.mousePosition.x, _startPosition.x);
+            _selectionBox.xMax = Mathf.Max(Input.mousePosition.x, _startPosition.x);
 
-            if (Input.mousePosition.y < _startPosition.y)
-            {
-                _selectionBox.yMin = Input.mousePosition.y;
-                _selectionBox.yMax = _startPosition.y;
-            }
-            else
-            {
-                _selectionBox.yMin = _startPosition.y;
-                _selectionBox.yMax = Input.mousePosition.y;
-            }
+            _selectionBox.yMin = Mathf.Min(Input.mousePosition.y, _startPosition.y);
+            _selectionBox.yMax = Mathf.Max(Input.mousePosition.y, _startPosition.y);  
         }
         private void SelectUnits()
         {
-            //TODO: Refactor this code
-            var unitList = UnitSelections.Instance.unitList
-                .Where(item => _selectionBox.Contains(camera.WorldToScreenPoint(item.transform.position)))
-                .ToArray();
-            UnitSelections.Instance.DragSelect(unitList);
+            _unitsList = new List<Transform>();
+            foreach (var t in UnitSelections.Instance.UnitList)
+            {
+                if (_selectionBox.Contains(camera.WorldToScreenPoint(t.position)))
+                    _unitsList.Add(t);
+            }
+            UnitSelections.Instance.DragSelect(_unitsList.ToArray());
         }
     }
 }

@@ -5,11 +5,11 @@ namespace Units_Selection
     public class Unit : MonoBehaviour{
 
         public void Start(){
-            UnitSelections.Instance.AddElement(ref UnitSelections.Instance.unitList, transform);
+            UnitSelections.Instance.AddElement(UnitSelections.Instance.UnitList, transform);
         }
 
         private void OnDestroy(){
-            UnitSelections.Instance.RemoveElement(ref UnitSelections.Instance.unitList, transform);
+            UnitSelections.Instance.RemoveElement(UnitSelections.Instance.UnitList, transform);
         }
 
         private void OnDrawGizmos()

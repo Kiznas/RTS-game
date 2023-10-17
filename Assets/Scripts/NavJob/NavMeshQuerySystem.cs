@@ -72,7 +72,8 @@ namespace NavJob
             }
         }
         public delegate void SuccessQueryDelegate (int id, List<float3> corners);
-        public delegate void FailedQueryDelegate (int id, PathfindingFailedReason reason);
+
+        private delegate void FailedQueryDelegate (int id, PathfindingFailedReason reason);
         private SuccessQueryDelegate _pathResolvedCallbacks;
         private FailedQueryDelegate _pathFailedCallbacks;
         private readonly ConcurrentDictionary<int, List<float3>> _cachedPaths = new();
@@ -84,24 +85,6 @@ namespace NavJob
             public float3 From;
             public float3 To;
             public int AreaMask;
-        }
-
-        /// <summary>
-        /// Register a callback that is called upon successful request
-        /// </summary>
-        /// <param name="callback"></param>
-        public void RegisterPathResolvedCallback (SuccessQueryDelegate callback)
-        {
-            _pathResolvedCallbacks += callback;
-        }
-
-        /// <summary>
-        /// Register a callback that is called upon failed request
-        /// </summary>
-        /// <param name="callback"></param>
-        public void RegisterPathFailedCallback (FailedQueryDelegate callback)
-        {
-            _pathFailedCallbacks += callback;
         }
 
         /// <summary>
@@ -127,29 +110,12 @@ namespace NavJob
         }
 
         /// <summary>
-        /// Purge the cached paths
-        /// </summary>
-        private void PurgeCache ()
-        {
-            _cachedPaths.Clear ();
-        }
-
-        /// <summary>
         /// Static counterpart of RegisterPathResolvedCallback.
         /// </summary>
         /// <param name="callback"></param>
         public static void RegisterPathResolvedCallbackStatic (SuccessQueryDelegate callback)
         {
             Instance._pathResolvedCallbacks += callback;
-        }
-
-        /// <summary>
-        /// Static counterpart of RegisterPathFailedCallback
-        /// </summary>
-        /// <param name="callback"></param>
-        public static void RegisterPathFailedCallbackStatic (FailedQueryDelegate callback)
-        {
-            Instance._pathFailedCallbacks += callback;
         }
 
         /// <summary>
@@ -162,14 +128,6 @@ namespace NavJob
         public static void RequestPathStatic (int id, Vector3 from, Vector3 to, int areaMask = -1)
         {
             Instance.RequestPath (id, from, to, areaMask);
-        }
-
-        /// <summary>
-        /// Static counterpart of PurgeCache
-        /// </summary>
-        public static void PurgeCacheStatic ()
-        {
-            Instance.PurgeCache ();
         }
 
         [BurstCompile]

@@ -1,14 +1,14 @@
-using System;
-using System.Linq;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Units_Selection
 {
     public class UnitSelections : MonoBehaviour
     {
-        public Transform[] unitList = Array.Empty<Transform>();
-        public Transform[] unitSelectedList = Array.Empty<Transform>();
-        public Transform[] unselectedUnits = Array.Empty<Transform>();
+        public readonly HashSet<Transform> UnitList = new();
+        public HashSet<Transform> UnitSelectedHash = new();
+        public HashSet<Transform> UnselectedUnitsHash = new();
 
         public static UnitSelections Instance { get; private set; }
 
@@ -27,59 +27,50 @@ namespace Units_Selection
 
         private void UpdateUnselectedUnits()
         {
-            unselectedUnits = unitList.Except(unitSelectedList).ToArray();
+            UnselectedUnitsHash = new HashSet<Transform>(UnitList);
+            UnselectedUnitsHash.ExceptWith(UnitSelectedHash);
         }
 
         public void ClickSelect(Transform unitToAdd)
         {
             DeselectAll();
-            AddElement(ref unitSelectedList, unitToAdd);
+            AddElement(UnitSelectedHash, unitToAdd);
             UpdateUnselectedUnits();
         }
 
         public void ShiftClickSelect(Transform unitToAdd)
         {
-            if (!unitSelectedList.Contains(unitToAdd))
+            if (!UnitSelectedHash.Contains(unitToAdd))
             {
-                AddElement(ref unitSelectedList, unitToAdd);
+                AddElement(UnitSelectedHash, unitToAdd);
             }
             else
             {
-                RemoveElement(ref unitSelectedList, unitToAdd);
+                RemoveElement(UnitSelectedHash, unitToAdd);
             }
             UpdateUnselectedUnits();
         }
 
         public void DragSelect(Transform[] units)
         {
-            unitSelectedList = units;
+            UnitSelectedHash.AddRange(units);
             UpdateUnselectedUnits();
         }
 
         public void DeselectAll()
         {
-            unitSelectedList = Array.Empty<Transform>();
+            UnitSelectedHash.Clear();
             UpdateUnselectedUnits();
         }
 
-        public void AddElement(ref Transform[] array, Transform element)
+        public void AddElement(HashSet<Transform> hashSet, Transform element)
         {
-            int newSize = array.Length + 1;
-            Array.Resize(ref array, newSize);
-            array[newSize - 1] = element;
+            hashSet.Add(element);
         }
 
-        public void RemoveElement(ref Transform[] array, Transform element)
+        public void RemoveElement(HashSet<Transform> hashSet, Transform element)
         {
-            int index = Array.IndexOf(array, element);
-            if (index >= 0)
-            {
-                for (int i = index; i < array.Length - 1; i++)
-                {
-                    array[i] = array[i + 1];
-                }
-                Array.Resize(ref array, array.Length - 1);
-            }
+            hashSet.Remove(element);
         }
     }
 }

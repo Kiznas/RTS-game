@@ -1,7 +1,5 @@
-using System;
 using Unity.Jobs;
- using System.Linq;
- using UnityEngine;
+using UnityEngine;
  using Unity.Burst;
  using Unity.Collections;
  using Unity.Mathematics;
@@ -10,7 +8,7 @@ using Unity.Jobs;
 namespace Units_Selection {
     public class UnitsMaster : MonoBehaviour
     {
-        private Transform[] _selectedUnits = Array.Empty<Transform>();
+        private HashSet<Transform> _selectedUnits = new();
 
         private float _formationAngle;
         private Vector3 _startPos;
@@ -29,7 +27,7 @@ namespace Units_Selection {
 
         private void AngleReceive(object arg1, SendAngle arg2)
         {
-            _selectedUnits = UnitSelections.Instance.unitSelectedList;
+            _selectedUnits = UnitSelections.Instance.UnitSelectedHash;
             _formationAngle = arg2.Angle;
             _startPos = arg2.StartPos;
             UpdatePositionsWithJobs(_startPos, _formationAngle);
@@ -37,10 +35,16 @@ namespace Units_Selection {
 
         private void UpdatePositionsWithJobs(Vector3 destination, float angle)
         {
-            var unitsNumber = _selectedUnits.Length;
+            var unitsNumber = _selectedUnits.Count;
 
-            var positions = new List<float3>(_selectedUnits.Length);
-            positions.AddRange(_selectedUnits.Select(unit => unit.transform.position).Select(dummy => (float3)dummy));
+            var positions = new List<float3>(_selectedUnits.Count);
+            foreach (var unit in _selectedUnits)
+            {
+                if (unit != null)
+                {
+                    positions.Add(unit.position);
+                }
+            }
 
             var unitsStartPos = new NativeArray<float3>(positions.ToArray(), Allocator.TempJob);
             var unitsEndPos = new NativeArray<float3>(positions.Count, Allocator.TempJob);
@@ -59,7 +63,7 @@ namespace Units_Selection {
             };
 
             // Schedule and run the job
-            var jobHandle = jobData.Schedule(unitsNumber, 64);
+            var jobHandle = jobData.Schedule(unitsNumber, 8);
             jobHandle.Complete();
 
             EventAggregator.Post(this, new SendDestination { PosArray = unitsEndPos , FormationAngle = _formationAngle});

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using Unity.Burst;
 using Units_Selection;
@@ -15,8 +16,8 @@ public class MeshRendering : MonoBehaviour
 
     private readonly Vector3 _meshOffset = new(0, 0.5f, 0);
 
-    private static Transform[] Unselected => UnitSelections.Instance.unselectedUnits;
-    private static Transform[] Selected => UnitSelections.Instance.unitSelectedList;
+    private static Transform[] Unselected => UnitSelections.Instance.UnselectedUnitsHash.ToArray();
+    private static Transform[] Selected => UnitSelections.Instance.UnitSelectedHash.ToArray();
     
     private int _previousUnselectedCount = -1;
     private int _previousSelectedCount = -1;

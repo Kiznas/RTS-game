@@ -13,11 +13,10 @@ namespace Units_Selection
     {
         [SerializeField] private float rotationSpeed;
         [SerializeField] private float moveSpeed = 1f;
+        
         private List<UnitMovementStruct> _units;
         private TransformAccessArray _transformAccessArray;
         private static int _lastAssignedID;
-        
-        
 
         private void Start()
         {
@@ -34,7 +33,7 @@ namespace Units_Selection
 
         private void SetDestination(object arg1, SendDestination unitsDestination)
         {
-            var selectedUnitsSet = new HashSet<Transform>(UnitSelections.Instance.unitSelectedList);
+            var selectedUnitsSet = new HashSet<Transform>(UnitSelections.Instance.UnitSelectedHash);
             var destinations = unitsDestination.PosArray;
 
             // Clear the dictionary when starting a new destination calculation
@@ -53,6 +52,8 @@ namespace Units_Selection
             var index = 0;
             foreach (var unit in selectedUnitsSet)
             {
+                if(unit == null) 
+                    return;
                 UnitMovementStruct newUnit = new UnitMovementStruct
                 {
                     ID = _lastAssignedID++,
