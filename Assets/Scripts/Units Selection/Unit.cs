@@ -1,7 +1,6 @@
+using UnityEngine;
 using System.Collections;
 using Unity.Mathematics;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Units_Selection
 {
@@ -17,13 +16,22 @@ namespace Units_Selection
             UnitSelections.Instance.RemoveElement( UnitSelections.Instance.UnitList, transform);
         }
 
+        private void LateUpdate()
+        {
+            if (transform.hasChanged)
+            {
+                transform.hasChanged = false;
+            }
+        }
+
         private void OnDrawGizmos()
         {
             var pos = transform.position;
+            var scale = transform.localScale;
             Gizmos.color = new Color(1, 0, 0, 0.5f);
-            Gizmos.DrawCube(pos, transform.localScale);
+            Gizmos.DrawCube(pos, scale);
             Gizmos.color = new Color(0, 1, 0, 0.2f);
-            Gizmos.DrawSphere(pos, 1);
+            Gizmos.DrawSphere(pos, scale.x /2.5f);
         }
 
         [ContextMenu("StartCheck")]
@@ -34,15 +42,16 @@ namespace Units_Selection
         private IEnumerator CheckForCollision()
         {
             Collider[] hitColliders = new Collider[2];
-            Physics.OverlapSphereNonAlloc(transform.position, 1, hitColliders, layerMask, QueryTriggerInteraction.UseGlobal);
+            Physics.OverlapSphereNonAlloc(transform.position, transform.localScale.x / 2.5f, hitColliders, layerMask, QueryTriggerInteraction.UseGlobal);
             foreach (var col in hitColliders)
             {
-                if (col != null && col.gameObject != gameObject)
+                if (col != null && col.gameObject != gameObject && !col.gameObject.transform.hasChanged)
                 {
-                    Debug.Log("Colliding");
                     var pos = transform.position;
+                    Vector3 collisionCenter = col.transform.position;
+                    Vector3 moveDirection = collisionCenter - pos;
                     MoveJobSystem.Instance.SetDestination(
-                                new float3(pos.x + Random.Range(-3,4), pos.y, pos.z + Random.Range(-3,4)), gameObject.transform);
+                                new float3(pos.x + moveDirection.x * -1.5f, pos.y, pos.z + moveDirection.z * -1.5f), gameObject.transform);
                 }
             }
             yield return new WaitForSeconds(2f);

@@ -74,7 +74,7 @@ namespace Units_Selection
             // Clear the dictionary when starting a new destination calculation
             _unitIndexMap.Clear();
 
-            for (int i = 0; i < _transformAccessArray.length; i++)
+            for (int i = _transformAccessArray.length - 1; i >= 0; i--)
             {
                 if (selectedUnitsSet.Contains(_transformAccessArray[i].transform))
                 {
