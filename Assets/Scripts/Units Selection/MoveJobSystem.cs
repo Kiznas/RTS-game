@@ -6,6 +6,7 @@ using Unity.Collections;
 using Unity.Mathematics;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
+using Random = UnityEngine.Random;
 
 namespace Units_Selection
 {
@@ -17,21 +18,55 @@ namespace Units_Selection
         private List<UnitMovementStruct> _units;
         private TransformAccessArray _transformAccessArray;
         private static int _lastAssignedID;
+        public static MoveJobSystem Instance;
 
-        private void Start()
+
+        private void Awake()
         {
-            EventAggregator.Subscribe<SendDestination>(SetDestination);
+            if (Instance == null) { Instance = this; }
+            else { Destroy(gameObject); }
+            
+            EventAggregator.Subscribe<SendDestination>(MoveSelectedUnits);
             _transformAccessArray = new TransformAccessArray(40000);
             _units = new List<UnitMovementStruct>(40000);
         }
 
+
         private void OnDestroy()
         {
-            EventAggregator.Unsubscribe<SendDestination>(SetDestination);
+            EventAggregator.Unsubscribe<SendDestination>(MoveSelectedUnits);
             _transformAccessArray.Dispose();
         }
 
-        private void SetDestination(object arg1, SendDestination unitsDestination)
+        public void SetDestination(float3 destinationPoint, Transform unit)
+        {
+            for (int i = 0; i < _transformAccessArray.length; i++)
+            {
+                if (_transformAccessArray[i].transform == unit)
+                {
+                    return;
+                }
+            }
+
+            if (unit == null)
+                return;
+            UnitMovementStruct newUnit = new UnitMovementStruct
+            {
+                        ID = _lastAssignedID++,
+                        DestinationPoints = new UnsafeList<float3>(30, Allocator.Persistent),
+                        RotationAngle = Random.Range(0, 361)
+            };
+
+            _units.Add(newUnit);
+            _transformAccessArray.Add(unit);
+
+            _unitIndexMap[newUnit.ID] = _units.Count - 1;
+
+            NavMeshQuerySystem.RequestPathStatic(newUnit.ID, unit.position, destinationPoint);
+            NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(AddWaypoints);
+        }
+
+        private void MoveSelectedUnits(object arg1, SendDestination unitsDestination)
         {
             var selectedUnitsSet = new HashSet<Transform>(UnitSelections.Instance.UnitSelectedHash);
             var destinations = unitsDestination.PosArray;
@@ -73,7 +108,6 @@ namespace Units_Selection
             NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(AddWaypoints);
         }
 
-
         private readonly Dictionary<int, int> _unitIndexMap = new();
 
         private void AddWaypoints(int id, List<float3> points)
@@ -104,7 +138,7 @@ namespace Units_Selection
             if (_transformAccessArray.length > 0)
             {
                 MoveJobHandler(_transformAccessArray);
-                Debug.Log(_transformAccessArray.length);
+                // Debug.Log(_transformAccessArray.length);
             }
         }
 
