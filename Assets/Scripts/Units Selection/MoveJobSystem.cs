@@ -27,6 +27,7 @@ namespace Units_Selection
             else { Destroy(gameObject); }
             
             EventAggregator.Subscribe<SendDestination>(MoveSelectedUnits);
+            EventAggregator.Subscribe<AvoidanceMove>(SetDestination);
             _transformAccessArray = new TransformAccessArray(40000);
             _units = new List<UnitMovementStruct>(40000);
         }
@@ -38,8 +39,9 @@ namespace Units_Selection
             _transformAccessArray.Dispose();
         }
 
-        public void SetDestination(float3 destinationPoint, Transform unit)
+        private void SetDestination(object o, AvoidanceMove avoidanceData)
         {
+            var unit = UnitSelections.Instance.UnitList[avoidanceData.indexOfUnit];
             for (int i = 0; i < _transformAccessArray.length; i++)
             {
                 if (_transformAccessArray[i].transform == unit)
@@ -62,7 +64,7 @@ namespace Units_Selection
 
             _unitIndexMap[newUnit.ID] = _units.Count - 1;
 
-            NavMeshQuerySystem.RequestPathStatic(newUnit.ID, unit.position, destinationPoint);
+            NavMeshQuerySystem.RequestPathStatic(newUnit.ID, unit.position, avoidanceData.destination);
             NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(AddWaypoints);
         }
 

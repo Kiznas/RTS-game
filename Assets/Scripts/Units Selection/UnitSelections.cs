@@ -6,7 +6,7 @@ namespace Units_Selection
 {
     public class UnitSelections : MonoBehaviour
     {
-        public readonly HashSet<Transform> UnitList = new();
+        public readonly List<Transform> UnitList = new();
         public HashSet<Transform> UnitSelectedHash = new();
         public HashSet<Transform> UnselectedUnitsHash = new();
 
@@ -63,12 +63,22 @@ namespace Units_Selection
             UpdateUnselectedUnits();
         }
 
-        public void AddElement(HashSet<Transform> hashSet, Transform element)
+        public static void AddElement(List<Transform> unitsList, Transform element)
+        {
+            unitsList.Add(element);
+        }
+
+        public static void RemoveElement(List<Transform> unitsList, Transform element)
+        {
+            unitsList.Remove(element);
+        }
+
+        private static void AddElement(HashSet<Transform> hashSet, Transform element)
         {
             hashSet.Add(element);
         }
 
-        public void RemoveElement(HashSet<Transform> hashSet, Transform element)
+        private static void RemoveElement(HashSet<Transform> hashSet, Transform element)
         {
             hashSet.Remove(element);
         }

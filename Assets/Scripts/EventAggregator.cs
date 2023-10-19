@@ -38,3 +38,9 @@ public class SendDestination{
     public NativeArray<float3> PosArray;
     public float FormationAngle;
 }
+
+public class AvoidanceMove
+{
+    public float3 destination;
+    public int indexOfUnit;
+}

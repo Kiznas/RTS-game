@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91116868-9244-4513-93ed-feb77c6a0ef7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsAvoidanceScript.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsAvoidanceScript.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/EventAggregator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/EventAggregator.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +37,7 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/347e3e2bef8c4deb82c9790c6e198135941800/0a/541151ea/SerializedProperty.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/347e3e2bef8c4deb82c9790c6e198135941800/0a/541151ea/SerializedProperty.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/b0/57991e3a/Action`2.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b41119cc6741409ea29f63c7f98de938172800/0e/32659ee2/Shader.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b41119cc6741409ea29f63c7f98de938172800/48/c9958413/Graphics.cs" root0="SKIP_HIGHLIGHTING" />
@@ -125,10 +129,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="87728">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="87728" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -189,6 +193,7 @@
       <workItem from="1697555481874" duration="1980000" />
       <workItem from="1697621641543" duration="8568000" />
       <workItem from="1697637451657" duration="7042000" />
+      <workItem from="1697721349814" duration="12144000" />
     </task>
     <task id="LOCAL-00001" summary="Code refactoring">
       <option name="closed" value="true" />
@@ -224,6 +229,23 @@
     <option name="LAST_COMMIT_MESSAGE" value="Code refactoring" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs</url>
+          <line>42</line>
+          <properties documentPath="Z:\Coding\Unity\Unity Projects\RTS-game\Assets\Scripts\Units Selection\MoveJobSystem.cs" initialLine="42" containingFunctionPresentation="Method 'SetDestination'">
+            <startOffsets>
+              <option value="1329" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1330" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Type#UnityEngine.Jobs.TransformAccessArray" memberName="m_TransformArray" />
