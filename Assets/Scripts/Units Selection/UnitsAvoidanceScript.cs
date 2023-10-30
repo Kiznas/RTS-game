@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.Burst;
 using Unity.Collections;
@@ -11,17 +12,17 @@ namespace Units_Selection
 	public class UnitsAvoidanceScript : MonoBehaviour
 	{
 		private TransformAccessArray _transformAccessArray;
+		private UnsafeList<float3> _lastPositionsOfUnits;
 
 		private void Start()
 		{
 			_transformAccessArray = new TransformAccessArray(40000);
+			_lastPositionsOfUnits = new UnsafeList<float3>(40000, Allocator.Persistent);
 		}
 
 		[ContextMenu("StartAvoid")]
-		private void StartAvoiding()
-		{
-			StartCoroutine(AvoidingJob());
-		}
+		public void StartAvoiding() => 
+					StartCoroutine(AvoidingJob());
 
 		IEnumerator AvoidingJob()
 		{
@@ -32,15 +33,19 @@ namespace Units_Selection
 			{
 				posList.Add(unit.position);
 			}
+			if (_lastPositionsOfUnits.Length <= 0) 
+				_lastPositionsOfUnits.CopyFrom(posList);
 			var avoidance = new AvoidanceJob
 			{
 						PosList = posList,
-						AvoidanceStructs = avoidanceQueue
+						AvoidanceStructs = avoidanceQueue,
+						LastPos = _lastPositionsOfUnits
 			};
                 
 			var moveJobHandle = avoidance.Schedule(_transformAccessArray);
 			moveJobHandle.Complete();
-
+			
+			_lastPositionsOfUnits.CopyFrom(posList);
 			
 			while (avoidanceQueue.TryDequeue(out var avoidanceData))
 			{
@@ -57,6 +62,7 @@ namespace Units_Selection
 		private struct AvoidanceJob : IJobParallelForTransform
 		{
 			public UnsafeList<float3> PosList;
+			public UnsafeList<float3> LastPos;
 			[NativeDisableParallelForRestriction]
 			public NativeQueue<AvoidanceStruct> AvoidanceStructs;
 
@@ -64,21 +70,19 @@ namespace Units_Selection
 
 			public void Execute(int unitIndex, TransformAccess transform)
 			{
-				//TODO: Make so it will check if unit is moving - if yes then do not check for avoidance
 				for (int index = 0; index < PosList.Length; index++)
 				{
-					// Skip checking the unit's own position
 					if (index == unitIndex)
 						continue;
 
 					float3 pos = PosList[index];
-					if ((transform.position - (Vector3)pos).sqrMagnitude <= NEIGHBOR_DIST * NEIGHBOR_DIST)
+					if ((transform.position - (Vector3)pos).sqrMagnitude <= NEIGHBOR_DIST * NEIGHBOR_DIST && transform.position == (Vector3)LastPos[unitIndex] && (Vector3)PosList[index] == (Vector3)LastPos[index])
 					{
 						float3 moveDirection =  pos - (float3)transform.position;
 						var destinationPoint = new float3(
-									pos.x + moveDirection.x * -1.5f,
+									pos.x + moveDirection.x * -2f,
 									pos.y,
-									pos.z + moveDirection.z * -1.5f);
+									pos.z + moveDirection.z * -2f);
 						AvoidanceStructs.AsParallelWriter().Enqueue(new AvoidanceStruct(destinationPoint, unitIndex));
 					}
 				}

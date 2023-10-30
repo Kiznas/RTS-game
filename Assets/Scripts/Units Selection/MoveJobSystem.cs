@@ -140,7 +140,6 @@ namespace Units_Selection
             if (_transformAccessArray.length > 0)
             {
                 MoveJobHandler(_transformAccessArray);
-                // Debug.Log(_transformAccessArray.length);
             }
         }
 
