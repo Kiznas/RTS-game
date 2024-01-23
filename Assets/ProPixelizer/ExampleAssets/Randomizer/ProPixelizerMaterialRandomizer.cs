@@ -1,3 +1,4 @@
+// Copyright Elliot Bentine, 2018-
 using UnityEngine;
 using System.Collections.Generic;
 

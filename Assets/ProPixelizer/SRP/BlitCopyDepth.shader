@@ -5,7 +5,7 @@ Shader "Hidden/ProPixelizer/SRP/BlitCopyDepth" {
 	Properties{ _MainTex("Texture", any) = "" {} }
 		SubShader{
 			Pass {
-				ZTest Always Cull Off ZWrite On
+				ZTest Always Cull Off ZWrite On ColorMask 0
 
 				HLSLPROGRAM
 				#pragma vertex vert

@@ -75,9 +75,7 @@ Shader "Hidden/ProPixelizer/SRP/ApplyPixelizationMap" {
 		// Instead use the DEPTH_OUTPUT_ON multi_compile_local to toggle whether output is depth or not. 
 		#if UNITY_VERSION >= 202220
 			#if PIXELMAP_DEPTH_OUTPUT_ON
-				float frag(ProPVaryings i) : SV_Depth {
-					float depth;
-					float4 color;
+				void frag(ProPVaryings i, out float4 color : SV_Target, out float depth : SV_Depth) {
 			#else
 				void frag(ProPVaryings i, out float4 color : SV_Target) {
 					float depth;
@@ -86,7 +84,7 @@ Shader "Hidden/ProPixelizer/SRP/ApplyPixelizationMap" {
 			void frag(ProPVaryings i, out float4 color: COLOR, out float depth : SV_DEPTH) {
 		#endif
 			float4 packed = SAMPLE_TEXTURE2D(_PixelizationMap, sampler_point_clamp, i.scrPos.xy);
-			float2 uvs = UnpackPixelMapUV(packed, _MainTex_TexelSize); 
+			float2 uvs = UnpackPixelMap(i.scrPos.xy, packed.rg, _MainTex_TexelSize);
 			color = SAMPLE_TEXTURE2D(_MainTex, sampler_point_clamp, uvs.xy); // scene color at pixelised coordinate
 			depth = SAMPLE_TEXTURE2D_X(_SceneDepthTexture, sampler_point_clamp, uvs.xy).r; // scene depth at pixelised coordinate
 			float4 original_color = SAMPLE_TEXTURE2D(_MainTex, sampler_point_clamp, i.scrPos.xy); // scene color at unpixelised coordinate
@@ -104,9 +102,6 @@ Shader "Hidden/ProPixelizer/SRP/ApplyPixelizationMap" {
 				color = original_color;
 				depth = original_depth;
 			}
-			#if PIXELMAP_DEPTH_OUTPUT_ON && UNITY_VERSION >= 202220
-				return depth;
-			#endif
 		}
 		ENDHLSL
 		}

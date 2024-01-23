@@ -1,4 +1,5 @@
-﻿#if UNITY_EDITOR
+﻿// Copyright Elliot Bentine, 2018-
+#if UNITY_EDITOR
 using UnityEditor.AssetImporters;
 using UnityEngine;
 
@@ -24,7 +25,6 @@ namespace ProPixelizer
         {
             ProPixelizerVerification.ReimportShaders();
             Debug.Log(string.Format("Added ProPixelizer to project."));
-            ProPixelizerVerification.Check();
         }
     }
 }

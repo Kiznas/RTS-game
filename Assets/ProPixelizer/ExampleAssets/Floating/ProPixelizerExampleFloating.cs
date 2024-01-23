@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// Copyright Elliot Bentine, 2018-
+using UnityEngine;
 
 namespace ProPixelizer
 {

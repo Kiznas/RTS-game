@@ -119,8 +119,8 @@ Shader "Hidden/ProPixelizer/SRP/Pixelization Map" {
 					nearestScreenUV = nearer && pixelate ? ppos : nearestScreenUV;
 				}
 
-				// Need to transform data to use precision properly. This is to make sure that integer pixel positions get mapped properly into the buffer.
-				screenUV = PackPixelMapUV(nearestScreenUV, _MainTex_TexelSize);
+				// Store the shifted uv coordinates in the pixelisation map.
+				screenUV = PackPixelMap(i.scrPos.xy, nearestScreenUV, _MainTex_TexelSize);
 			}
 		}
 		ENDHLSL

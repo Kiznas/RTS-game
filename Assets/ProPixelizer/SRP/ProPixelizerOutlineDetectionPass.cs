@@ -122,6 +122,11 @@ namespace ProPixelizer
                 cameraTextureDescriptor.width,
                 cameraTextureDescriptor.height
             );
+
+#if UNITY_2023_1_OR_NEWER
+            // Required for 2023.2 to get Unity to correctly set target buffers after a ProPixelizer draw call.
+            ConfigureTarget(_OutlineObjectBuffer, _OutlineObjectBuffer_Depth);
+#endif
         }
         public override void FrameCleanup(CommandBuffer cmd)
         {
@@ -171,6 +176,12 @@ namespace ProPixelizer
             CommandBuffer buffer = CommandBufferPool.Get(PROFILER_TAG);
             buffer.name = "ProPixelizer Outline Pass";
 
+            // Preview cameras must unfortunately disable dither expansion
+            if (renderingData.cameraData.camera.cameraType == CameraType.Preview)
+                buffer.SetGlobalFloat("_ProPixelizer_Pixel_Scale", 0.01f);
+            else 
+                buffer.SetGlobalFloat("_ProPixelizer_Pixel_Scale", 1f);
+
             if (UseNormalsForEdgeDetection)
                 buffer.EnableShaderKeyword("NORMAL_EDGE_DETECTION_ON");
             else
@@ -199,7 +210,17 @@ namespace ProPixelizer
             var sort = new SortingSettings(renderingData.cameraData.camera);
             var drawingSettings = new DrawingSettings(ProPixelizerShaderTagID, sort);
             var filteringSettings = new FilteringSettings(RenderQueueRange.all);
+#if UNITY_2023_2_OR_NEWER
+            buffer = CommandBufferPool.Get(PROFILER_TAG);
+            buffer.name = "ProPixelizer Outline Pass (Render Objects)";
+            var renderListParams = new RendererListParams(renderingData.cullResults, drawingSettings, filteringSettings);
+            var renderList = context.CreateRendererList(ref renderListParams);
+            buffer.DrawRendererList(renderList);
+            context.ExecuteCommandBuffer(buffer);
+            CommandBufferPool.Release(buffer);
+#else
             context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
+#endif
 
             // Perform outline detection
             buffer = CommandBufferPool.Get(PROFILER_TAG);

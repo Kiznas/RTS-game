@@ -1,13 +1,9 @@
 using UnityEngine;
-using System.Collections;
-using Unity.Mathematics;
 
 namespace Units_Selection
 {
     public class Unit : MonoBehaviour
     {
-        [SerializeField] private LayerMask layerMask;
-
         public void Start(){
             UnitSelections.AddElement(UnitSelections.Instance.UnitList, transform);
         }
@@ -34,7 +30,7 @@ namespace Units_Selection
             Gizmos.DrawSphere(pos, scale.x /2.5f);
         }
 
-        // [ContextMenu("StartCheck")]
+        // OLD COLLISION CHECK
         // private void StartCheck()
         // {
         //     StartCoroutine(CheckForCollision());

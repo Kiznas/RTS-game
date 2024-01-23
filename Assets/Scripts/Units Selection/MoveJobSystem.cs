@@ -19,8 +19,7 @@ namespace Units_Selection
         private TransformAccessArray _transformAccessArray;
         private static int _lastAssignedID;
         public static MoveJobSystem Instance;
-
-
+        
         private void Awake()
         {
             if (Instance == null) { Instance = this; }
@@ -31,8 +30,7 @@ namespace Units_Selection
             _transformAccessArray = new TransformAccessArray(40000);
             _units = new List<UnitMovementStruct>(40000);
         }
-
-
+        
         private void OnDestroy()
         {
             EventAggregator.Unsubscribe<SendDestination>(MoveSelectedUnits);
@@ -55,8 +53,7 @@ namespace Units_Selection
             UnitMovementStruct newUnit = new UnitMovementStruct
             {
                         ID = _lastAssignedID++,
-                        DestinationPoints = new UnsafeList<float3>(30, Allocator.Persistent),
-                        RotationAngle = Random.Range(0, 361)
+                        DestinationPoints = new UnsafeList<float3>(30, Allocator.Persistent)
             };
 
             _units.Add(newUnit);
@@ -216,20 +213,24 @@ namespace Units_Selection
             private void GetLookRotation(TransformAccess transform, UnsafeList<float3> destinationPoints, int index)
             {
                 var direction = ((Vector3)destinationPoints[0] - transform.position).normalized;
+
                 if (direction != Vector3.zero)
                 {
-                    if (Vector3.Distance(transform.position, destinationPoints[0]) > 1)
+                    float distance = Vector3.Distance(transform.position, destinationPoints[^1]);
+
+                    if (distance > 1)
                     {
-                        var lookRotation = Quaternion.LookRotation(direction);
-                        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, DeltaTime * RotationSpeed);
+                        var rotationSpeed = RotationSpeed * DeltaTime;
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed);
                     }
                     else
                     {
                         var rotation = Quaternion.Euler(0, -Units[index].RotationAngle, 0);
-                        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, DeltaTime * RotationSpeed * 5);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 3);
                     }
                 }
             }
+
         }
 
         private struct UnitMovementStruct

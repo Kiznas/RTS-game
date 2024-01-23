@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Unity.Burst;
 using Unity.Collections;
@@ -39,7 +38,7 @@ namespace Units_Selection
 			{
 						PosList = posList,
 						AvoidanceStructs = avoidanceQueue,
-						LastPos = _lastPositionsOfUnits
+						Unit1LastPos = _lastPositionsOfUnits
 			};
                 
 			var moveJobHandle = avoidance.Schedule(_transformAccessArray);
@@ -62,28 +61,34 @@ namespace Units_Selection
 		private struct AvoidanceJob : IJobParallelForTransform
 		{
 			public UnsafeList<float3> PosList;
-			public UnsafeList<float3> LastPos;
+			public UnsafeList<float3> Unit1LastPos;
 			[NativeDisableParallelForRestriction]
 			public NativeQueue<AvoidanceStruct> AvoidanceStructs;
 
 			private const float NEIGHBOR_DIST = 1f;
 
-			public void Execute(int unitIndex, TransformAccess transform)
+			public void Execute(int unit1Index, TransformAccess transform)
 			{
-				for (int index = 0; index < PosList.Length; index++)
+				float3 unit1Pos = transform.position;
+				for (int unit2Index = 0; unit2Index < PosList.Length; unit2Index++)
 				{
-					if (index == unitIndex)
+					if (unit2Index == unit1Index)
 						continue;
 
-					float3 pos = PosList[index];
-					if ((transform.position - (Vector3)pos).sqrMagnitude <= NEIGHBOR_DIST * NEIGHBOR_DIST && transform.position == (Vector3)LastPos[unitIndex] && (Vector3)PosList[index] == (Vector3)LastPos[index])
+					float3 unit2Pos = PosList[unit2Index];
+					
+					bool isOnSamePosition = unit1Pos.Equals(Unit1LastPos[unit1Index]);
+					bool isOnPreviousPositionSelf = (Vector3)PosList[unit2Index] == (Vector3)Unit1LastPos[unit2Index];
+					bool checkIfTooClose = (transform.position - (Vector3)unit2Pos).sqrMagnitude <= NEIGHBOR_DIST * NEIGHBOR_DIST;
+					
+					if (checkIfTooClose && isOnSamePosition && isOnPreviousPositionSelf)
 					{
-						float3 moveDirection =  pos - (float3)transform.position;
+						float3 moveDirection =  unit2Pos - (float3)transform.position;
 						var destinationPoint = new float3(
-									pos.x + moveDirection.x * -2f,
-									pos.y,
-									pos.z + moveDirection.z * -2f);
-						AvoidanceStructs.AsParallelWriter().Enqueue(new AvoidanceStruct(destinationPoint, unitIndex));
+									unit2Pos.x + moveDirection.x * -2f,
+									unit2Pos.y,
+									unit2Pos.z + moveDirection.z * -2f);
+						AvoidanceStructs.AsParallelWriter().Enqueue(new AvoidanceStruct(destinationPoint, unit1Index));
 					}
 				}
 			}

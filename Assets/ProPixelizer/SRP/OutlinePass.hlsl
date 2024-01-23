@@ -63,7 +63,7 @@ void outline_frag(Varyings i, out float4 color : COLOR)
 #endif 
 	//clip(alpha_out - 0.0001);
 	clip(alpha_out - 0.1);
-	PackOutline(_OutlineColor, _ID, round(_PixelSize), color);
+	PackOutline(_OutlineColor, _ID, max(1, round(_PixelSize * _ProPixelizer_Pixel_Scale)), color);
 #if NORMAL_EDGE_DETECTION_ON
 	color.rb = i.normalCS.rg * 0.5 + 0.5;
 #endif

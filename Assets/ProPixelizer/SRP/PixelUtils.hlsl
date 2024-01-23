@@ -48,7 +48,7 @@ inline void PixelClipAlpha_float(float4x4 unity_MatrixVP, float3 objectCentreWS,
 	// disable pixelation in shadergraph preview - we lack the passes required to make it work here.
 	float pixelSize = 1;
 #else
-	float pixelSize = round(macroPixelSize * max(1, _ProPixelizer_Pixel_Scale));
+	float pixelSize = max(1, round(macroPixelSize * _ProPixelizer_Pixel_Scale));
 #endif
 
 	//For perspective, objPixelPos must be rounded to the nearest pixel to prevent float precision errors (causing tearing in perspective)

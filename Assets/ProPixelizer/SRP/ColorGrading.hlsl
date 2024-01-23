@@ -24,7 +24,7 @@ inline float mapToCell(float input, float size) {
 	return (clamp(input * RES, 0, RES-1)+0.5) / (RES*size);
 }
 
-inline void ColorGrade_float(Texture2D<float4> _palette, SamplerState sampler_palette, float4 orig, float2 ditherUV, out float4 graded)
+inline void ColorGrade_float(UnityTexture2D _palette, UnitySamplerState sampler_palette, float4 orig, float2 ditherUV, out float4 graded)
 { 
 	// Do the color grading LUT in gamma space - so the colors are more evenly spaced for the human eye, better use of LUT bit depth.
 	// Note that outgoing linear->gamma is not required - the LUT is stored as sRGB texture.

@@ -59,7 +59,7 @@ Shader "ProPixelizer/SRP/PixelizedWithOutline"
 		{
 			Name "ProPixelizerPass"
 			Tags {
-				"RenderPipeline" = "UniversalRenderPipeline"
+				"RenderPipeline" = "UniversalPipeline"
 				"LightMode" = "ProPixelizer"
 				"DisableBatching" = "True"
 			}
@@ -126,6 +126,6 @@ Shader "ProPixelizer/SRP/PixelizedWithOutline"
 			ENDHLSL
 		}
      }
-	CustomEditor "PixelizedWithOutlineShaderGUI"
+	CustomEditor "ProPixelizer.PixelizedWithOutlineShaderGUI"
 	FallBack "ProPixelizer/Hidden/ProPixelizerBase"
 }

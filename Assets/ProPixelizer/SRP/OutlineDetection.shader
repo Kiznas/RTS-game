@@ -6,7 +6,7 @@ Shader "Hidden/ProPixelizer/SRP/OutlineDetection" {
 
 		SubShader{
 		Tags{
-			"RenderPipeline" = "UniversalRenderPipeline"
+			"RenderPipeline" = "UniversalPipeline"
 			"RenderType" = "Opaque"
 			"PreviewType" = "Plane"
 		}

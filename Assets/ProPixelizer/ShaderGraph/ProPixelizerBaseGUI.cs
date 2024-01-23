@@ -1,4 +1,5 @@
-﻿#if UNITY_EDITOR
+﻿// Copyright Elliot Bentine, 2018-
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 

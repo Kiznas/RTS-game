@@ -1,4 +1,5 @@
-﻿#if UNITY_EDITOR
+﻿// Copyright Elliot Bentine, 2018-
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -35,24 +36,10 @@ namespace ProPixelizer
 #endif
         }
 
-
-        public static void Check()
+        public static void GenerateWarnings()
         {
 #if UNITY_EDITOR
-            if (QualitySettings.renderPipeline as UniversalRenderPipelineAsset == null)
-            {
-                Debug.LogError("You have not currently set the render pipeline asset in the 'Quality' project settings. ProPixelizer requires a Universal Render Pipeline Asset.");
-            }
-
-            if (GraphicsSettings.renderPipelineAsset as UniversalRenderPipelineAsset == null)
-            {
-                Debug.LogError("You have not currently set the render pipeline asset in the 'Graphics' project settings. ProPixelizer requires a Universal Render Pipeline Asset.");
-            }
-
-            if (GraphicsSettings.renderPipelineAsset != QualitySettings.renderPipeline)
-            {
-                Debug.LogWarning("You are currently using different render pipeline assets for the graphics settings (Project Settings > Graphics) and quality settings (Project Settings > Quality). This may lead to unintended behavior for ProPixelizer.");
-            }
+            bool generatedWarning = false;
 
             // In the future, I hope that Unity makes ShaderGraphPreferences public so that I can use that rather than hard-coded names here.
             int variantLimit = EditorPrefs.GetInt("UnityEditor.ShaderGraph.VariantLimit", 128);
@@ -65,7 +52,21 @@ namespace ProPixelizer
                     "e.g. to 256, by changing Preferences > ShaderGraph > Shader Variant Limit. " +
                     "Afterwards, reimport the ProPixelizer folder.",
                     variantLimit));
+                generatedWarning = true;
             }
+
+            var asset = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+            if (asset != null)
+            {
+                if (asset.msaaSampleCount > 1)
+                {
+                    Debug.LogWarning(string.Format("MSAA is enabled in the active render pipeline asset, this is incompatible with ProPixelizer."));
+                    generatedWarning = true;
+                }
+            }
+
+            if (generatedWarning)
+                Debug.LogWarning("Warnings have been emitted during the ProPixelizer verification step. You can disable them by unticking 'Generate Warnings' in the render feature.");
 #endif
         }
     }

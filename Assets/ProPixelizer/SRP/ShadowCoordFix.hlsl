@@ -1,4 +1,5 @@
-﻿#ifndef SHADOWCOORDFIX_INCLUDED
+﻿// Copyright Elliot Bentine, 2018-
+#ifndef SHADOWCOORDFIX_INCLUDED
 	#define SHADOWCOORDFIX_INCLUDED
 
 	// Note that we import this from PixelUtils, and _not_ from LightUtils.
