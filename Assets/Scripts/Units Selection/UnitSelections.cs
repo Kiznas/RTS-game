@@ -29,6 +29,7 @@ namespace Units_Selection
         {
             UnselectedUnitsHash = new HashSet<Transform>(UnitList);
             UnselectedUnitsHash.ExceptWith(UnitSelectedHash);
+            EventAggregator.Post(this, new UnitsChanged());
         }
 
         public void ClickSelect(Transform unitToAdd)

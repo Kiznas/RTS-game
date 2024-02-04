@@ -6,7 +6,6 @@ using Unity.Collections;
 using Unity.Mathematics;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
-using Random = UnityEngine.Random;
 
 namespace Units_Selection
 {
@@ -18,15 +17,17 @@ namespace Units_Selection
         private List<UnitMovementStruct> _units;
         private TransformAccessArray _transformAccessArray;
         private static int _lastAssignedID;
-        public static MoveJobSystem Instance;
+        private static MoveJobSystem _instance;
+        
+        private readonly Dictionary<int, int> _unitIndexMap = new();
         
         private void Awake()
         {
-            if (Instance == null) { Instance = this; }
+            if (_instance == null) { _instance = this; }
             else { Destroy(gameObject); }
             
             EventAggregator.Subscribe<SendDestination>(MoveSelectedUnits);
-            EventAggregator.Subscribe<AvoidanceMove>(SetDestination);
+            EventAggregator.Subscribe<AvoidanceMove>(AvoidanceDestinationSet);
             _transformAccessArray = new TransformAccessArray(40000);
             _units = new List<UnitMovementStruct>(40000);
         }
@@ -36,8 +37,16 @@ namespace Units_Selection
             EventAggregator.Unsubscribe<SendDestination>(MoveSelectedUnits);
             _transformAccessArray.Dispose();
         }
+        
+        private void Update()
+        {
+            if (_transformAccessArray.length > 0)
+            {
+                MoveJobHandler(_transformAccessArray);
+            }
+        }
 
-        private void SetDestination(object o, AvoidanceMove avoidanceData)
+        private void AvoidanceDestinationSet(object o, AvoidanceMove avoidanceData)
         {
             var unit = UnitSelections.Instance.UnitList[avoidanceData.indexOfUnit];
             for (int i = 0; i < _transformAccessArray.length; i++)
@@ -51,10 +60,10 @@ namespace Units_Selection
             if (unit == null)
                 return;
             UnitMovementStruct newUnit = new UnitMovementStruct
-            {
-                        ID = _lastAssignedID++,
+                    {
+                        ID = _lastAssignedID++, 
                         DestinationPoints = new UnsafeList<float3>(30, Allocator.Persistent)
-            };
+                    };
 
             _units.Add(newUnit);
             _transformAccessArray.Add(unit);
@@ -70,8 +79,7 @@ namespace Units_Selection
             var selectedUnitsSet = new HashSet<Transform>(UnitSelections.Instance.UnitSelectedHash);
             var destinations = unitsDestination.PosArray;
 
-            // Clear the dictionary when starting a new destination calculation
-            _unitIndexMap.Clear();
+           _unitIndexMap.Clear();
 
             for (int i = _transformAccessArray.length - 1; i >= 0; i--)
             {
@@ -106,9 +114,7 @@ namespace Units_Selection
 
             NavMeshQuerySystem.RegisterPathResolvedCallbackStatic(AddWaypoints);
         }
-
-        private readonly Dictionary<int, int> _unitIndexMap = new();
-
+      
         private void AddWaypoints(int id, List<float3> points)
         {
             if (_unitIndexMap.TryGetValue(id, out var indexToUpdate))
@@ -130,16 +136,7 @@ namespace Units_Selection
                 Debug.LogWarning($"ID {id} not found in _units list.");
             }
         }
-
-
-        private void Update()
-        {
-            if (_transformAccessArray.length > 0)
-            {
-                MoveJobHandler(_transformAccessArray);
-            }
-        }
-
+        
         private void MoveJobHandler(TransformAccessArray transformAccessArray)
         {
             if (transformAccessArray.length > 0 && _units.Count > 0)
@@ -175,7 +172,7 @@ namespace Units_Selection
             for (var i = 0; i < _units.Count; i++)
             {
                 var destinationsLength = _units[i].DestinationPoints.Length;
-                if (destinationsLength > 0 && Vector3.Distance(_transformAccessArray[i].position, _units[i].DestinationPoints[0]) < 0.01f)
+                if (destinationsLength > 0 && Vector3.Distance(_transformAccessArray[i].position, _units[i].DestinationPoints[^1]) < 0.01f)
                 {
                     _units[i].DestinationPoints.Dispose();
                     _units.RemoveAtSwapBack(i);

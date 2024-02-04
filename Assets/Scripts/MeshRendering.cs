@@ -19,22 +19,32 @@ public class MeshRendering : MonoBehaviour
     private static Transform[] Unselected => UnitSelections.Instance.UnselectedUnitsHash.ToArray();
     private static Transform[] Selected => UnitSelections.Instance.UnitSelectedHash.ToArray();
     
-    private int _previousUnselectedCount = -1;
-    private int _previousSelectedCount = -1;
-    
     private TransformAccessArray _selectedTransformAccess;
     private TransformAccessArray _unselectedTransformAccess;
+    private bool _changeSelected;
 
     private void Start()
     {
         _renderParamsReg = new RenderParams(material);
         _renderParamsSelected = new RenderParams(selectedMaterial);
+        EventAggregator.Subscribe<UnitsChanged>(ChangeSelected);
+    }
+
+    private void ChangeSelected(object arg1, UnitsChanged arg2)
+    {
+        ChangeRendered(true);
     }
 
     private void Update()
     {
         RenderUnselected();
         RenderSelected();
+        ChangeRendered(false);
+    }
+
+    private void ChangeRendered(bool status)
+    {
+        _changeSelected = status;
     }
 
     private void RenderUnselected()
@@ -42,14 +52,11 @@ public class MeshRendering : MonoBehaviour
         var unselectedCount = Unselected.Length;
         if (unselectedCount > 0)
         {
-            if (unselectedCount != _previousUnselectedCount)
+            if (_changeSelected)
             {
-                _previousUnselectedCount = unselectedCount;
-                
                 if (!_unselectedTransformAccess.isCreated){
                     _unselectedTransformAccess = new TransformAccessArray(unselectedCount);
                 }
-                
                 _unselectedTransformAccess.SetTransforms(Unselected);
             }
 
@@ -74,12 +81,10 @@ public class MeshRendering : MonoBehaviour
         var selectedCount = Selected.Length;
         if (selectedCount > 0)
         {
-            if (selectedCount != _previousSelectedCount)
+            if (_changeSelected)
             {
-                _previousSelectedCount = selectedCount;
-                
                 if (!_selectedTransformAccess.isCreated){
-                    _selectedTransformAccess = new TransformAccessArray(_previousSelectedCount);
+                    _selectedTransformAccess = new TransformAccessArray(selectedCount);
                 }
                 _selectedTransformAccess.SetTransforms(Selected);
             }
@@ -94,7 +99,6 @@ public class MeshRendering : MonoBehaviour
             handle.Complete();
 
             Graphics.RenderMeshInstanced(_renderParamsSelected, mesh, 0, matrices, selectedCount);
-
             
             matrices.Dispose();
         }

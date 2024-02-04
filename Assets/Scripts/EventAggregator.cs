@@ -44,3 +44,8 @@ public class AvoidanceMove
     public float3 destination;
     public int indexOfUnit;
 }
+
+public class UnitsChanged
+{
+    
+}

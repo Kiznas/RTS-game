@@ -6,150 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="91116868-9244-4513-93ed-feb77c6a0ef7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RTS-game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyDebuggerEditor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyDebuggerEditor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyEditorStyle.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyEditorStyle.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyManagerEditor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyManagerEditor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyMenuItem.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/GraphyMenuItem.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/Tayx.Graphy.Editor.asmdef" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Editor/Tayx.Graphy.Editor.asmdef.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Northwest-Bold.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Northwest-Bold/ERIC-TIRADO-NORTHWEST-LICENSE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Northwest-Bold/ERIC-TIRADO-NORTHWEST-LICENSE.txt.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Northwest-Bold/NORTHWEST-B.otf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Northwest-Bold/NORTHWEST-B.otf.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Roboto.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Roboto/LICENSE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Roboto/LICENSE.txt.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Roboto/Roboto-Bold.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Roboto/Roboto-Bold.ttf.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Roboto/Roboto-Regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Font/Roboto/Roboto-Regular.ttf.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/GUI.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/GUI/GraphyGUISkin.guiskin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/GUI/GraphyGUISkin.guiskin.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/LICENSE.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/Audio_Spectrum_Graph.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/Audio_Spectrum_Graph.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/Audio_Spectrum_Highest_Values_Graph.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/Audio_Spectrum_Highest_Values_Graph.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/FPS_Graph.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/FPS_Graph.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/RAM_Allocated_Graph.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/RAM_Allocated_Graph.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/RAM_Mono_Graph.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/RAM_Mono_Graph.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/RAM_Reserved_Graph.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Materials/RAM_Reserved_Graph.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/ADVANCED - Module.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/ADVANCED - Module.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/AUDIO - Module.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/AUDIO - Module.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/FPS - Module.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/FPS - Module.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/RAM - Module.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/Internal/RAM - Module.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/[Graphy].prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Prefab/[Graphy].prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/README.md.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Readme! - Graphy - Documentation.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Readme! - Graphy - Documentation.pdf.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Advanced.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Advanced/G_AdvancedData.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Advanced/G_AdvancedData.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioGraph.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioGraph.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioManager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioManager.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioMonitor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioMonitor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioText.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Audio/G_AudioText.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsGraph.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsGraph.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsManager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsManager.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsMonitor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsMonitor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsText.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Fps/G_FpsText.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Graph.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Graph/G_Graph.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Graph/G_Graph.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/GraphyDebugger.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/GraphyDebugger.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/GraphyManager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/GraphyManager.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamGraph.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamGraph.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamManager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamManager.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamMonitor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamMonitor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamText.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Ram/G_RamText.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Shader.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Shader/G_GraphShader.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Shader/G_GraphShader.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Tayx.Graphy.asmdef" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Tayx.Graphy.asmdef.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/UI.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/UI/IModifiableState.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/UI/IModifiableState.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/UI/IMovable.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/UI/IMovable.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_ExtensionMethods.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_ExtensionMethods.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_FloatString.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_FloatString.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_Intstring.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_Intstring.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_Singleton.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Runtime/Util/G_Singleton.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Shaders.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Shaders/GraphMobile.shader" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Shaders/GraphMobile.shader.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Shaders/GraphStandard.shader" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Shaders/GraphStandard.shader.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/2x2_Texture.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/2x2_Texture.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Debugger_Logo_Dark.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Debugger_Logo_Dark.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Debugger_Logo_White.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Debugger_Logo_White.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Manager_Logo_Dark.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Manager_Logo_Dark.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Manager_Logo_White.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Manager_Logo_White.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Rounded_Rect_10px.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/Textures/Rounded_Rect_10px.png.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Graphy - Ultimate Stats Monitor/package.json.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene/NavMesh-NavMesh Surface.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene/NavMesh-NavMesh Surface.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/EventAggregator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/EventAggregator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MeshRendering.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MeshRendering.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/MoveJobSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/Unit.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsAvoidanceScript.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsAvoidanceScript.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Terrain/New Terrain.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Terrain/New Terrain.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitSelections.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsCheckForOverlap.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units Selection/UnitsCheckForOverlap.cs.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +57,7 @@
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="SWEA" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -337,6 +200,7 @@
       <workItem from="1699019260010" duration="77000" />
       <workItem from="1699019353078" duration="1450000" />
       <workItem from="1706014015053" duration="9587000" />
+      <workItem from="1707065083631" duration="5346000" />
     </task>
     <task id="LOCAL-00001" summary="Code refactoring">
       <option name="closed" value="true" />
